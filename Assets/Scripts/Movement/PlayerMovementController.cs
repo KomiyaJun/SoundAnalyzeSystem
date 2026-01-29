@@ -49,6 +49,7 @@ public class PlayerMovementController : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             SetMovementState(new WaterMovement(), _waterSettings);
+            SoundService.Instance.SetEnviroment("Water", 0.5f);
         }
     }
 
@@ -57,7 +58,9 @@ public class PlayerMovementController : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             SetMovementState(new GroundMovement(), _groundSettings);
+            SoundService.Instance.SetEnviroment("Normal", 0.5f);
         }
+        
     }
 
 }
