@@ -44,23 +44,15 @@ public class PlayerMovementController : MonoBehaviour
         _currentData = newData;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    public void EnterWaterState()
     {
-        if (collision.CompareTag("Water"))
-        {
-            SetMovementState(new WaterMovement(), _waterSettings);
-            SoundService.Instance.SetEnviroment("Water", 0.5f);
-        }
+        SetMovementState(new WaterMovement(), _waterSettings);
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    public void ExitWaterState()
     {
-        if (collision.CompareTag("Water"))
-        {
-            SetMovementState(new GroundMovement(), _groundSettings);
-            SoundService.Instance.SetEnviroment("Normal", 0.5f);
-        }
-        
+        SetMovementState(new WaterMovement(), _groundSettings);
     }
 
 }

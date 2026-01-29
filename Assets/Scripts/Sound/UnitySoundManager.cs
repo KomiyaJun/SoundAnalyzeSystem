@@ -136,7 +136,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         _fadeCoroutine = null;
     }
 
-    public void SetEnviroment(string snapshotName, float duration)
+    public void SetEnvironment(string snapshotName, float duration)
     {
         AudioMixerSnapshot snapshot = mixer.FindSnapshot(snapshotName);
 

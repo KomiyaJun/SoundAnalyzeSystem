@@ -12,5 +12,5 @@ public interface ISoundManager
     void StopBGM(float fadeDuration = 1.0f);
 
     //ŠÂ‹«•Ï‰»(…’†‚Å‰¹‚ğ“Ü‚ç‚¹‚é‚È‚Ç)
-    void SetEnviroment(string snapShotName, float duration = 1.0f);
+    void SetEnvironment(string snapShotName, float duration = 1.0f);
 }
