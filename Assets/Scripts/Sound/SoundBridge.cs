@@ -11,6 +11,10 @@ public class SoundBridge : MonoBehaviour
         SoundService.Instance.SetEnvironment(snapshotName);
     }
 
+    public void PlayBGM(SoundData data)
+    {
+        SoundService.Instance.PlayBGM(data);
+    }
     public void PlaySE(SoundData data)
     {
         SoundService.Instance.PlaySE(data);
