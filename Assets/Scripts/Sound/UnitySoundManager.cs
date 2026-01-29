@@ -17,7 +17,19 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
 
     private void Awake()
     {
+        //SoundServiceに既に登録されていた場合削除
+        if(SoundService.Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        //サウンドサービスに自身を登録
         SoundService.Provide(this);
+
+        //自身をDontDestroyOnLoadに変更
+        DontDestroyOnLoad(gameObject);
+
 
         //SEの初期化
         for (int i = 0; i < sePoolSize; i++)
