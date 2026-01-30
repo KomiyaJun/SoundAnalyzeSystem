@@ -15,6 +15,12 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     private AudioSource _inactiveBgmSource;
     private Coroutine _fadeCoroutine;
 
+
+    private const string KeyMasterVolume = "MasterVolume";
+    private const string KeyBGMVolume = "BGMVolume";
+    private const string KeySEVolume = "SEVolume";
+    private const string KeyUIVolume = "UIVolume";
+
     private void Awake()
     {
         //SoundServiceに既に登録されていた場合削除
@@ -46,6 +52,11 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         //BGMのループを設定
         _activeBgmSource.loop = true;
         _inactiveBgmSource.loop = true;
+    }
+
+    private void Start()
+    {
+        LoadVolumes();
     }
 
     //SEを再生
@@ -162,6 +173,44 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         {
             Debug.LogWarning($"Snapshot {snapshotName} not found in Mixer.");
         }
+    }
+
+    public void SetVolume(VolumeType type, float volume)
+    {
+        //0を入れると計算不可能になってエラーが出るので、極小値を入れる
+        float clampedValume = Mathf.Clamp(volume, 0.0001f, 1f);
+
+        //デシベル変換
+        float decibal = 20f * Mathf.Log10(clampedValume);
+
+        string paramName = "";
+        string saveKey = "";
+
+        //enumに応じたパラメータ名を指定
+        switch(type)
+        {
+            case VolumeType.Master: paramName = KeyMasterVolume; saveKey = KeyMasterVolume; break;
+            case VolumeType.BGM: paramName = KeyBGMVolume; saveKey = KeyBGMVolume; break;
+            case VolumeType.SE: paramName = KeySEVolume; saveKey = KeySEVolume; break;
+            case VolumeType.UI: paramName = KeyUIVolume; saveKey = KeyUIVolume; break;
+
+
+        };
+
+        mixer.SetFloat(paramName, decibal);
+
+        //値を保存
+        PlayerPrefs.SetFloat(saveKey, volume);
+        PlayerPrefs.Save();
+    }
+
+    //保存された音量設定をロードする
+    private void LoadVolumes()
+    {
+        SetVolume(VolumeType.Master, PlayerPrefs.GetFloat(KeyMasterVolume, 1.0f));
+        SetVolume(VolumeType.BGM, PlayerPrefs.GetFloat(KeyBGMVolume, 1.0f));
+        SetVolume(VolumeType.SE, PlayerPrefs.GetFloat(KeySEVolume, 1.0f));
+        SetVolume(VolumeType.UI, PlayerPrefs.GetFloat(KeyUIVolume, 1.0f));
     }
 
 }

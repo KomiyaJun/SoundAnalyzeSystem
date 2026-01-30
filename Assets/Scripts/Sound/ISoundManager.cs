@@ -1,5 +1,13 @@
 using UnityEngine;
 
+public enum VolumeType
+{
+    Master,
+    BGM,
+    SE,
+    UI
+}
+
 public interface ISoundManager
 {
     //SEÄ¶
@@ -13,4 +21,7 @@ public interface ISoundManager
 
     //ŠÂ‹«•Ï‰»(…’†‚Å‰¹‚ğ“Ü‚ç‚¹‚é‚È‚Ç)
     void SetEnvironment(string snapShotName, float duration = 1.0f);
+
+    //‰¹—Ê•ÏX
+    void SetVolume(VolumeType type, float volume);
 }
