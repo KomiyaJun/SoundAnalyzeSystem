@@ -8,6 +8,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     [SerializeField] private int sePoolSize = 20;
     [SerializeField] private AudioSource sePrefab;
     
+    private List<AudioSource> _layerSources = new List<AudioSource>();
     private List<AudioSource> _sePool = new List<AudioSource>();
 
     [Header("BGMSettings")]
@@ -213,4 +214,78 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         SetVolume(VolumeType.UI, PlayerPrefs.GetFloat(KeyUIVolume, 1.0f));
     }
 
+    
+    public void PlayLayeredBGM(LayeredSoundData data)
+    {
+        //既存のBGMを停止
+        StopBGM(data.fadeDuration);
+
+        //必要な数だけAudioSourceを用意し、足りなければ追加する
+        PrepareLayerSources(data.layers.Length);
+
+        //オーディオエンジンの現在の精密の時間を取得する
+        double startTime = AudioSettings.dspTime + 0.1; //0.1秒後に一斉に予約をする
+
+        for(int i = 0; i < data.layers.Length; i++)
+        {
+            _layerSources[i].clip = data.layers[i];
+            _layerSources[i].loop = true;
+            _layerSources[i].volume = (i == 0) ? 1f : 0f; //最初のパート(ドラム等)以外は0で開始
+
+            //精密予約再生
+            _layerSources[i].PlayScheduled(startTime);
+        }
+    }
+
+    private void PrepareLayerSources(int count)
+    {
+        while(_layerSources.Count < count)
+        {
+            var source = gameObject.AddComponent<AudioSource>();
+            source.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM")[0];
+            _layerSources.Add(source);
+        }
+    }
+
+    public void SetLayerVolume(int index, float volume, float duration)
+    {
+        if (index >= _layerSources.Count) return;
+
+        //音量を滑らかに変更
+        StartCoroutine(FadeLayerVolume(_layerSources[index], volume, duration));
+    }
+
+    public System.Collections.IEnumerator FadeLayerVolume(AudioSource source, float target, float duration)
+    {
+        float startVol = source.volume;
+        float time = 0;
+        while(time < duration)
+        {
+            //Time使用
+            time += Time.deltaTime;
+            source.volume = Mathf.Clamp(startVol, target, time / duration);
+            yield return null;
+        }
+        source.volume = target;
+    }
+
+    public void SetAllLayersVolume(float volume, float duration)
+    {
+        for(int i = 0; i < _layerSources.Count; i++)
+        {
+            SetLayerVolume(i, volume, duration);
+        }
+    }
+
+    public void ApplyPreset(BgmPreset preset, float duration = 0.5f)
+    {
+        for(int i = 0; i < preset.layerVolumes.Length; i++)
+        {
+            //レイヤーが存在する場合のみ音量を変更
+            if(i < _layerSources.Count)
+            {
+                SetLayerVolume(i,preset.layerVolumes[i], duration);
+            }
+        }
+    }
 }
