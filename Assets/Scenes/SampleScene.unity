@@ -1160,7 +1160,7 @@ Transform:
   m_GameObject: {fileID: 894365626}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.54, y: -1.59, z: 0}
+  m_LocalPosition: {x: -11.54, y: -2.14, z: 0}
   m_LocalScale: {x: 3.6163, y: 3.6163, z: 3.6163}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1197,22 +1197,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 894365628}
         m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
-        m_MethodName: PlayLayerBGM
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 4926b1a9285444741a9cb5365a3129d6, type: 2}
-          m_ObjectArgumentAssemblyTypeName: LayeredSoundData, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 894365628}
-        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
         m_MethodName: ApplyPreset
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 83e924cc9d16d874f8d311a313e564db, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: 1338d4846b67756489430de3b0ce5a2c, type: 2}
           m_ObjectArgumentAssemblyTypeName: BgmPreset, Assembly-CSharp
           m_IntArgument: 3
           m_FloatArgument: 1
@@ -1221,7 +1209,19 @@ MonoBehaviour:
         m_CallState: 2
   OnExitZone:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 894365628}
+        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
+        m_MethodName: ApplyPreset
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 11400000, guid: 83e924cc9d16d874f8d311a313e564db, type: 2}
+          m_ObjectArgumentAssemblyTypeName: BgmPreset, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!61 &894365630
 BoxCollider2D:
   m_ObjectHideFlags: 0
