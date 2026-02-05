@@ -6,7 +6,7 @@ public class SoundData : ScriptableObject
 {
     public AudioClip clip;
     public AudioMixerGroup mixerGroup;
-    [Range(0f, 1f)] public float valume;
+    [Range(0f, 1f)] public float volume;
     [Range(0f, 1f)] public float pitch;
     public bool loop;
 

@@ -7,7 +7,9 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private int sePoolSize = 20;
     [SerializeField] private AudioSource sePrefab;
-    
+    [SerializeField] private AudioSource _ambientSource;
+
+
     private List<AudioSource> _layerSources = new List<AudioSource>();
     private List<AudioSource> _sePool = new List<AudioSource>();
 
@@ -21,6 +23,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     private const string KeyBGMVolume = "BGMVolume";
     private const string KeySEVolume = "SEVolume";
     private const string KeyUIVolume = "UIVolume";
+    private const string KeyAmbientVolume = "AmbientVolume";
 
     private void Awake()
     {
@@ -70,7 +73,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         source.clip = data.clip;
         source.outputAudioMixerGroup = data.mixerGroup;
 
-        source.volume = data.valume;
+        source.volume = data.volume;
         source.pitch = data.useRandomPitch
             ? data.pitch + Random.Range(-data.pitchRandomRange, data.pitchRandomRange)
             : data.pitch;
@@ -103,7 +106,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         _inactiveBgmSource.Play();
 
         //フェード開始
-        _fadeCoroutine = StartCoroutine(CrossFadeRoutine(data.valume, fadeDuration));
+        _fadeCoroutine = StartCoroutine(CrossFadeRoutine(data.volume, fadeDuration));
     }
     private System.Collections.IEnumerator CrossFadeRoutine(float targetVolume, float duration)
     {
@@ -194,7 +197,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
             case VolumeType.BGM: paramName = KeyBGMVolume; saveKey = KeyBGMVolume; break;
             case VolumeType.SE: paramName = KeySEVolume; saveKey = KeySEVolume; break;
             case VolumeType.UI: paramName = KeyUIVolume; saveKey = KeyUIVolume; break;
-
+            case VolumeType.Ambient: paramName = KeyAmbientVolume; saveKey = KeyAmbientVolume; break;
 
         };
 
@@ -212,23 +215,28 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         SetVolume(VolumeType.BGM, PlayerPrefs.GetFloat(KeyBGMVolume, 1.0f));
         SetVolume(VolumeType.SE, PlayerPrefs.GetFloat(KeySEVolume, 1.0f));
         SetVolume(VolumeType.UI, PlayerPrefs.GetFloat(KeyUIVolume, 1.0f));
+        SetVolume(VolumeType.Ambient, PlayerPrefs.GetFloat(KeyAmbientVolume, 1.0f));
     }
 
-    
     public void PlayLayeredBGM(LayeredSoundData data)
     {
         //既存のBGMを停止
         StopBGM(data.fadeDuration);
 
+        //レイヤーの配列を取得
+        AudioClip[] clips = data.GetAllClips();
+
         //必要な数だけAudioSourceを用意し、足りなければ追加する
-        PrepareLayerSources(data.layers.Length);
+        PrepareLayerSources(clips.Length);
 
         //オーディオエンジンの現在の精密の時間を取得する
         double startTime = AudioSettings.dspTime + 0.1; //0.1秒後に一斉に予約をする
 
-        for(int i = 0; i < data.layers.Length; i++)
+        for(int i = 0; i < clips.Length; i++)
         {
-            _layerSources[i].clip = data.layers[i];
+            if (clips[i] == null) continue; //空のスロットはスキップする
+
+            _layerSources[i].clip = clips[i];
             _layerSources[i].loop = true;
             _layerSources[i].volume = (i == 0) ? 1f : 0f; //最初のパート(ドラム等)以外は0で開始
 
@@ -247,8 +255,9 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         }
     }
 
-    public void SetLayerVolume(int index, float volume, float duration)
+    public void SetLayerVolume(BgmPartType part, float volume, float duration)
     {
+        int index = (int)part;
         if (index >= _layerSources.Count) return;
 
         //音量を滑らかに変更
@@ -273,19 +282,63 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     {
         for(int i = 0; i < _layerSources.Count; i++)
         {
-            SetLayerVolume(i, volume, duration);
+            StartCoroutine(FadeLayerVolume(_layerSources[i], volume, duration));
         }
     }
 
     public void ApplyPreset(BgmPreset preset, float duration = 0.5f)
     {
-        for(int i = 0; i < preset.layerVolumes.Length; i++)
+        float[] targetVolumes = preset.GetVolumeArray();
+
+
+        for(int i = 0; i < targetVolumes.Length; i++)
         {
             //レイヤーが存在する場合のみ音量を変更
             if(i < _layerSources.Count)
             {
-                SetLayerVolume(i,preset.layerVolumes[i], duration);
+                StartCoroutine(FadeLayerVolume(_layerSources[i], targetVolumes[i], duration));
             }
         }
+    }
+
+    //環境音開始
+    public void PlayAmbient(SoundData data, float fadeDuration)
+    {
+        if (_ambientSource.clip == data.clip && _ambientSource.isPlaying) return;    //同じ音が鳴っていた場合は行わない
+        StartCoroutine(FadeAmbient(data.clip, data.volume, fadeDuration));
+    }
+
+    public void StopAmbient(float fadeDuration)
+    {
+        StartCoroutine(FadeAmbient(null, 0, fadeDuration));
+    }
+
+    //環境音切り替え
+    private System.Collections.IEnumerator FadeAmbient(AudioClip clip, float targetVolume, float duration)
+    {
+        float startVol = _ambientSource.volume;
+        for (float t = 0; t < duration; t += Time.deltaTime)    //Time使用
+        {
+            _ambientSource.volume = Mathf.Lerp(startVol, 0, t / duration);
+            yield return null;
+        }
+
+        if(clip == null)
+        {
+            _ambientSource.Stop();
+            _ambientSource.clip = null;
+            yield break;
+        }
+
+        _ambientSource.clip = clip;
+        _ambientSource.loop = true;
+        _ambientSource.Play();
+
+        for(float t = 0; t < duration; t += Time.deltaTime)
+        {
+            _ambientSource.volume = Mathf.Lerp(0, targetVolume, t / duration);
+            yield return null;
+        }
+        _ambientSource.volume = targetVolume;
     }
 }

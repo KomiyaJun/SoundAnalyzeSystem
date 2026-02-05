@@ -26,8 +26,8 @@ public class SoundBridge : MonoBehaviour
         SoundService.Instance.PlayLayeredBGM(data);
     }
 
-    public void ActivateLayer(int index) => SoundService.Instance.SetLayerVolume(index, 1.0f);
-    public void DeactivateLayer(int index) => SoundService.Instance.SetLayerVolume(index, 1.0f);
+    public void ActivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, 1.0f);
+    public void DeactivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, 1.0f);
 
     public void SetAllLayersVolume(float volume)
     {
@@ -42,6 +42,16 @@ public class SoundBridge : MonoBehaviour
     public void StopBGM()
     {
         SoundService.Instance.StopBGM();
+    }
+
+    public void StartAmbient(SoundData data)
+    {
+        SoundService.Instance.PlayAmbient(data);
+    }
+
+    public void StopAmbient()
+    {
+        SoundService.Instance.StopAmbient();
     }
 
 }

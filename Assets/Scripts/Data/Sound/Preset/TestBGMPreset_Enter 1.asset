@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26e2fc308e2eec41889116d26d71f72, type: 3}
   m_Name: TestBGMPreset_Enter 1
   m_EditorClassIdentifier: 
-  layerVolumes:
-  - 1
-  - 1
-  - 0
-  - 0
+  melodyVolume: 0
+  chordsVolume: 0
+  bassVolume: 1
+  drumsVolume: 1
+  extraVolumes: []
