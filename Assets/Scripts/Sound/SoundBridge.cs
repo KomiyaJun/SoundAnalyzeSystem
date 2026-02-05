@@ -8,12 +8,12 @@ public class SoundBridge : MonoBehaviour
 
     public void SetEnviroment(string snapshotName)
     {
-        SoundService.Instance.SetEnvironment(snapshotName);
+        SoundService.Instance.SetEnvironment(snapshotName,defaultFadeDuration);
     }
 
     public void PlayBGM(SoundData data)
     {
-        SoundService.Instance.PlayBGM(data);
+        SoundService.Instance.PlayBGM(data, defaultFadeDuration);
     }
 
     public void PlaySE(SoundData data)
@@ -26,32 +26,32 @@ public class SoundBridge : MonoBehaviour
         SoundService.Instance.PlayLayeredBGM(data);
     }
 
-    public void ActivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, 1.0f);
-    public void DeactivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, 1.0f);
+    public void ActivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, defaultFadeDuration);
+    public void DeactivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, defaultFadeDuration);
 
     public void SetAllLayersVolume(float volume)
     {
-        SoundService.Instance.SetAllLayersVolume(volume);
+        SoundService.Instance.SetAllLayersVolume(volume, defaultFadeDuration);
     }
 
     public void ApplyPreset(BgmPreset preset)
     {
-        SoundService.Instance.ApplyPreset(preset);
+        SoundService.Instance.ApplyPreset(preset,defaultFadeDuration);
     }
 
     public void StopBGM()
     {
-        SoundService.Instance.StopBGM();
+        SoundService.Instance.StopBGM(defaultFadeDuration);
     }
 
     public void StartAmbient(SoundData data)
     {
-        SoundService.Instance.PlayAmbient(data);
+        SoundService.Instance.PlayAmbient(data, defaultFadeDuration);
     }
 
     public void StopAmbient()
     {
-        SoundService.Instance.StopAmbient();
+        SoundService.Instance.StopAmbient(defaultFadeDuration);
     }
 
 }

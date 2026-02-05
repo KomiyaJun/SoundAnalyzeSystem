@@ -35,6 +35,8 @@ public interface ISoundManager
 
     //レイヤーのindexに該当する部分の音量を調整
     void SetLayerVolume(BgmPartType part, float volume, float duration = 0.5f);
+    void SetLayerVolume(int index, float volume, float duration);
+
 
     //音量プリセットを使って音量を調節
     void ApplyPreset(BgmPreset preset, float duratio = 1.0f);

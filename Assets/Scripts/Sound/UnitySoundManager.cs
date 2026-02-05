@@ -83,14 +83,17 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         StartCoroutine(ReturnToPool(source));
     }
 
+    //利用可能なオーディオソースを返す
     private AudioSource GetAvailableSources() => _sePool.Find(s => !s.gameObject.activeSelf);
 
+    //プールを返す
     private System.Collections.IEnumerator ReturnToPool(AudioSource source)
     {
         yield return new WaitWhile(() => source.isPlaying);
         source.gameObject.SetActive(false);
     }
 
+    //BGMを再生
     public void PlayBGM(SoundData data, float fadeDuration)
     {
         //既に曲が再生中の場合は何もしない
@@ -108,6 +111,8 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         //フェード開始
         _fadeCoroutine = StartCoroutine(CrossFadeRoutine(data.volume, fadeDuration));
     }
+
+    //BGM切り替え時のクロスフェード処理
     private System.Collections.IEnumerator CrossFadeRoutine(float targetVolume, float duration)
     {
         //Time使用
@@ -139,13 +144,14 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
 
     }
 
-
+    //BGMを停止
     public void StopBGM(float fadeDuration)
     {
         if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
         _fadeCoroutine = StartCoroutine(FadeOutRoutine(fadeDuration));
     }
 
+    //停止時のフェード処理
     private System.Collections.IEnumerator FadeOutRoutine(float duration)
     {
         float startVolume = _activeBgmSource.volume;
@@ -163,6 +169,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         _fadeCoroutine = null;
     }
 
+    //環境設定を適応
     public void SetEnvironment(string snapshotName, float duration)
     {
         AudioMixerSnapshot snapshot = mixer.FindSnapshot(snapshotName);
@@ -179,6 +186,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         }
     }
 
+    //音量設定
     public void SetVolume(VolumeType type, float volume)
     {
         //0を入れると計算不可能になってエラーが出るので、極小値を入れる
@@ -218,6 +226,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         SetVolume(VolumeType.Ambient, PlayerPrefs.GetFloat(KeyAmbientVolume, 1.0f));
     }
 
+    //レイヤーでBGMを再生
     public void PlayLayeredBGM(LayeredSoundData data)
     {
         //既存のBGMを停止
@@ -245,6 +254,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         }
     }
 
+    //オーディオソースをレイヤー分用意
     private void PrepareLayerSources(int count)
     {
         while(_layerSources.Count < count)
@@ -255,15 +265,26 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         }
     }
 
+    //レイヤーのボリュームを変更(part)
     public void SetLayerVolume(BgmPartType part, float volume, float duration)
     {
         int index = (int)part;
-        if (index >= _layerSources.Count) return;
-
-        //音量を滑らかに変更
-        StartCoroutine(FadeLayerVolume(_layerSources[index], volume, duration));
+        ExecuteLayerFade(index, volume, duration);
+    }
+    //レイヤーのボリュームを変更(index)
+    public void SetLayerVolume(int index, float volume, float duration)
+    {
+        ExecuteLayerFade(index, volume, duration);
     }
 
+    //音量変更の共通処理
+    private void ExecuteLayerFade(int index, float volume, float duration)
+    {
+        if(index < 0 || index >= _layerSources.Count) return;
+        StartCoroutine(FadeLayerVolume(_layerSources[index],volume, duration));
+    }
+
+    //レイヤーのボリュームを変更
     public System.Collections.IEnumerator FadeLayerVolume(AudioSource source, float target, float duration)
     {
         float startVol = source.volume;
@@ -278,6 +299,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         source.volume = target;
     }
 
+    //全てのレイヤーの音量を設定
     public void SetAllLayersVolume(float volume, float duration)
     {
         for(int i = 0; i < _layerSources.Count; i++)
@@ -286,6 +308,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         }
     }
 
+    //プリセットを適応
     public void ApplyPreset(BgmPreset preset, float duration = 0.5f)
     {
         float[] targetVolumes = preset.GetVolumeArray();
@@ -308,6 +331,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         StartCoroutine(FadeAmbient(data.clip, data.volume, fadeDuration));
     }
 
+    //環境音停止
     public void StopAmbient(float fadeDuration)
     {
         StartCoroutine(FadeAmbient(null, 0, fadeDuration));
