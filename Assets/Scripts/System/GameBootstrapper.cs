@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using MyGame.AudioSetting;
 public static class GameBootstrapper
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

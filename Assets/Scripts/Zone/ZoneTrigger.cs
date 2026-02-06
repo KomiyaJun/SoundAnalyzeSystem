@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using MyGame.AudioSetting;
 
 public class ZoneTrigger : MonoBehaviour
 {

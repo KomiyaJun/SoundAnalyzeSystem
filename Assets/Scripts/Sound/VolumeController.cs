@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using MyGame.AudioSetting;
 
 public class VolumeController : MonoBehaviour
 {

@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class SoundService
+namespace MyGame.AudioSetting
 {
-    public static ISoundManager Instance { get; private set; }
-
-    public static void Provide(ISoundManager manager)
+    public class SoundService
     {
-        Instance = manager;
+        public static ISoundManager Instance { get; private set; }
+
+        public static void Provide(ISoundManager manager)
+        {
+            Instance = manager;
+        }
     }
 }
