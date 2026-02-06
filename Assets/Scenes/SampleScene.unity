@@ -1607,6 +1607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crossFadeTime: 1
   isLayeredBGM: 1
+  isIntro: 1
   sceneBGM: {fileID: 11400000, guid: 8efd2779a89f13245afa91833600a484, type: 2}
   layeredBGM: {fileID: 11400000, guid: 4926b1a9285444741a9cb5365a3129d6, type: 2}
   isAmbientON: 0

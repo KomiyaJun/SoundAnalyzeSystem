@@ -1,3 +1,4 @@
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class SoundBridge : MonoBehaviour
@@ -24,6 +25,11 @@ public class SoundBridge : MonoBehaviour
     public void PlayLayerBGM(LayeredSoundData data)
     {
         SoundService.Instance.PlayLayeredBGM(data);
+    }
+
+    public void PlayLayeredBGMWithIntro(LayeredSoundData data)
+    {
+        SoundService.Instance.PlayLayeredBGMWithIntro(data);
     }
 
     public void ActivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, defaultFadeDuration);

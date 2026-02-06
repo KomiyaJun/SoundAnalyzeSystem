@@ -13,17 +13,19 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     private List<AudioSource> _layerSources = new List<AudioSource>();
     private List<AudioSource> _sePool = new List<AudioSource>();
 
+    private Dictionary<AudioSource, Coroutine> _activeLayerFades = new Dictionary<AudioSource, Coroutine>();
+
     [Header("BGMSettings")]
     private AudioSource _activeBgmSource;
     private AudioSource _inactiveBgmSource;
     private Coroutine _fadeCoroutine;
-
 
     private const string KeyMasterVolume = "MasterVolume";
     private const string KeyBGMVolume = "BGMVolume";
     private const string KeySEVolume = "SEVolume";
     private const string KeyUIVolume = "UIVolume";
     private const string KeyAmbientVolume = "AmbientVolume";
+
 
     private void Awake()
     {
@@ -149,6 +151,11 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     {
         if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
         _fadeCoroutine = StartCoroutine(FadeOutRoutine(fadeDuration));
+
+        for(int i = 0; i < _layerSources.Count; i++)
+        {
+            ExecuteLayerFade(i, 0f, 1f);
+        }
     }
 
     //停止時のフェード処理
@@ -231,6 +238,18 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     {
         //既存のBGMを停止
         StopBGM(data.fadeDuration);
+        foreach(var kvp in _activeLayerFades)
+        {
+            if(kvp.Value != null) StopCoroutine(kvp.Value);
+        }
+        _activeLayerFades.Clear();
+
+        foreach(var source in _layerSources)
+        {
+            source.Stop();
+            source.volume = 0f;
+        }
+
 
         //レイヤーの配列を取得
         AudioClip[] clips = data.GetAllClips();
@@ -253,6 +272,74 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
             _layerSources[i].PlayScheduled(startTime);
         }
     }
+
+    //イントロ再生後にメイン部分をループ再生
+    public void PlayLayeredBGMWithIntro(LayeredSoundData data)
+    {
+        StopBGM(1.0f);
+
+        foreach(var kvp in _activeLayerFades)
+        {
+            if(kvp.Value != null) StopCoroutine(kvp.Value);
+        }
+        _activeLayerFades.Clear();
+
+        foreach(var source in _layerSources)
+        {
+            source.Stop();
+            source.volume = 0f;
+        }
+
+
+        int layerCount = 4;
+        PrepareLayerSources(layerCount * 2);    //イントロ用とループ用で2セット用意
+
+        double introStartTime = AudioSettings.dspTime + 0.1;
+
+        //イントロの長さを取得
+        double introDuration = (double)data.introDrums.samples / data.introDrums.frequency;
+
+        //ループ開始はイントロの開始+イントロの長さ
+        double loopStartTime = introStartTime + introDuration;
+
+        for(int i = 0; i <  layerCount; i++)
+        {
+            //イントロの予約
+            AudioSource introSrc = _layerSources[i];
+            introSrc.clip = GetIntroClipByIndex(data,i);
+            introSrc.loop = false;
+            introSrc.PlayScheduled(introStartTime);
+
+            //メインループの予約
+            AudioSource loopSrc = _layerSources[i + layerCount];
+            loopSrc.clip = GetLoopClipByIndex(data,i);
+            loopSrc.loop = true;
+            loopSrc.PlayScheduled(loopStartTime);
+
+            //音量設定
+            introSrc.volume = 1.0f;
+            loopSrc.volume = 1.0f;
+        }
+    }
+
+    //レイヤーサウンドデータの各クリップをindexで取得するヘルパー関数
+    private AudioClip GetIntroClipByIndex(LayeredSoundData data, int i) => i switch
+    {
+        0 => data.introMelody,
+        1 => data.introCords,
+        2 => data.introBass,
+        3 => data.introDrums,
+        _ => null,
+    };
+
+    private AudioClip GetLoopClipByIndex(LayeredSoundData data, int i) => i switch
+    {
+        0 => data.melody,
+        1 => data.chords,
+        2 => data.bass,
+        3 => data.drums,
+        _ => null,
+    };
 
     //オーディオソースをレイヤー分用意
     private void PrepareLayerSources(int count)
@@ -281,7 +368,31 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     private void ExecuteLayerFade(int index, float volume, float duration)
     {
         if(index < 0 || index >= _layerSources.Count) return;
-        StartCoroutine(FadeLayerVolume(_layerSources[index],volume, duration));
+
+        AudioSource source = _layerSources[index];
+
+        if(_activeLayerFades.ContainsKey(source) && _activeLayerFades[source] != null)
+        {
+            StopCoroutine(_activeLayerFades[source]);
+        }
+
+        _activeLayerFades[source] = StartCoroutine(FadeLayerVolumeRoutine(source, volume, duration));
+    }
+
+    private System.Collections.IEnumerator FadeLayerVolumeRoutine(AudioSource source, float target, float duration) 
+    {
+        float startVol = source.volume;
+        float time = 0;
+        while(time < duration)
+        {
+            time += Time.deltaTime; //Time使用
+            source.volume = Mathf.Lerp(startVol, target, time / duration);
+            yield return null;
+        }
+        source.volume = target;
+        if (target <= 0) source.Stop();
+
+        _activeLayerFades[source] = null;
     }
 
     //レイヤーのボリュームを変更
@@ -293,7 +404,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         {
             //Time使用
             time += Time.deltaTime;
-            source.volume = Mathf.Clamp(startVol, target, time / duration);
+            source.volume = Mathf.Lerp(startVol, target, time / duration);
             yield return null;
         }
         source.volume = target;
@@ -304,7 +415,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
     {
         for(int i = 0; i < _layerSources.Count; i++)
         {
-            StartCoroutine(FadeLayerVolume(_layerSources[i], volume, duration));
+            ExecuteLayerFade(i, volume, duration);
         }
     }
 
@@ -319,7 +430,7 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
             //レイヤーが存在する場合のみ音量を変更
             if(i < _layerSources.Count)
             {
-                StartCoroutine(FadeLayerVolume(_layerSources[i], targetVolumes[i], duration));
+                ExecuteLayerFade(i, targetVolumes[i], duration);
             }
         }
     }

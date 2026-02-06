@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d99b2bd3a41cdb24a99247ed441fc6f7, type: 3}
   m_Name: LayerTestBGM
   m_EditorClassIdentifier: 
+  introMelody: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
+  introCords: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
+  introBass: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
+  introDrums: {fileID: 8300000, guid: a235d590ef2a04d1b85b61ef4c21337c, type: 3}
   melody: {fileID: 8300000, guid: 005efe4cc39aab44fad114a447ae67ff, type: 3}
   chords: {fileID: 8300000, guid: 1adf389ac09d81343816badd15464a63, type: 3}
   bass: {fileID: 8300000, guid: 64b234b4f7677ac418ca3561fae5c66e, type: 3}

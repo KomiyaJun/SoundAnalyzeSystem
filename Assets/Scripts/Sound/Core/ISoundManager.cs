@@ -46,4 +46,6 @@ public interface ISoundManager
 
     //ŠÂ‹«‰¹‚Ì’âŽ~
     void StopAmbient(float fadeDuration = 1.0f);
+
+    void PlayLayeredBGMWithIntro(LayeredSoundData data);
 }

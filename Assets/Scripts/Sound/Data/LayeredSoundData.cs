@@ -3,6 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewLayeredSoundData", menuName = "Sound/LayeredBGM")]
 public class LayeredSoundData : ScriptableObject
 {
+    [Header("Optional")]
+    public AudioClip introMelody;
+    public AudioClip introCords;
+    public AudioClip introBass;
+    public AudioClip introDrums;
+
     [Header("Core Layers")]
     public AudioClip melody;
     public AudioClip chords;
