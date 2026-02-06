@@ -1304,24 +1304,24 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 894365628}
-        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
+        m_TargetAssemblyTypeName: MyGame.AudioSetting.SoundBridge, Assembly-CSharp
         m_MethodName: ApplyPreset
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 1338d4846b67756489430de3b0ce5a2c, type: 2}
-          m_ObjectArgumentAssemblyTypeName: BgmPreset, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: MyGame.AudioSetting.BgmPreset, Assembly-CSharp
           m_IntArgument: 3
           m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 894365628}
-        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
-        m_MethodName: StartAmbient
+        m_TargetAssemblyTypeName: MyGame.AudioSetting.SoundBridge, Assembly-CSharp
+        m_MethodName: PlayAmbient
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 51c4312fe89959b44bf9fc28198713d4, type: 2}
-          m_ObjectArgumentAssemblyTypeName: SoundData, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: MyGame.AudioSetting.SoundData, Assembly-CSharp
           m_IntArgument: 3
           m_FloatArgument: 1
           m_StringArgument: 
@@ -1331,12 +1331,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 894365628}
-        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
+        m_TargetAssemblyTypeName: MyGame.AudioSetting.SoundBridge, Assembly-CSharp
         m_MethodName: ApplyPreset
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 83e924cc9d16d874f8d311a313e564db, type: 2}
-          m_ObjectArgumentAssemblyTypeName: BgmPreset, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: MyGame.AudioSetting.BgmPreset, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1902,12 +1902,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1088402442}
-        m_TargetAssemblyTypeName: SoundBridge, Assembly-CSharp
-        m_MethodName: PlayLayerBGM
+        m_TargetAssemblyTypeName: MyGame.AudioSetting.SoundBridge, Assembly-CSharp
+        m_MethodName: PlayLayeredBGM
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 4926b1a9285444741a9cb5365a3129d6, type: 2}
-          m_ObjectArgumentAssemblyTypeName: LayeredSoundData, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: MyGame.AudioSetting.LayeredSoundData,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
