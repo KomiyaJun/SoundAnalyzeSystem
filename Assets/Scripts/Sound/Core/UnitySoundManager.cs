@@ -154,7 +154,13 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
 
         for(int i = 0; i < _layerSources.Count; i++)
         {
-            ExecuteLayerFade(i, 0f, 1f);
+            AudioSource source = _layerSources[i];
+            if(_activeLayerFades.ContainsKey(source) && _activeLayerFades[source] != null)
+            {
+                StopCoroutine(_activeLayerFades[source]);
+            }
+
+            _activeLayerFades[source] =  StartCoroutine(FadeOutAndStopCompletely(_layerSources[i], fadeDuration));
         }
     }
 
@@ -174,6 +180,25 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
         _activeBgmSource.volume = 0;
         _activeBgmSource.Stop();
         _fadeCoroutine = null;
+    }
+
+    private System.Collections.IEnumerator FadeOutAndStopCompletely(AudioSource source, float duration)
+    {
+        float startVol = source.volume;
+        float time = 0;
+        while(time < duration)
+        {
+            time += Time.deltaTime;//TimeŽg—p
+            source.volume = Mathf.Lerp(startVol, 0f, time / duration);
+            yield return null;
+        }
+        source.volume = 0;
+        source.Stop();
+
+        if (_activeLayerFades.ContainsKey(source))
+        {
+            _activeLayerFades[source] = null;
+        }
     }
 
     //ŠÂ‹«Ý’è‚ð“K‰ž
@@ -390,7 +415,6 @@ public class UnitySoundManager : MonoBehaviour, ISoundManager
             yield return null;
         }
         source.volume = target;
-        if (target <= 0) source.Stop();
 
         _activeLayerFades[source] = null;
     }
