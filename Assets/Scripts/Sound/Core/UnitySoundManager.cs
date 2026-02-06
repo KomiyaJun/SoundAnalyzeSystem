@@ -22,11 +22,12 @@ namespace MyGame.AudioSetting
         private AudioSource _inactiveBgmSource;
         private Coroutine _fadeCoroutine;
 
-        private const string KeyMasterVolume = "MasterVolume";
-        private const string KeyBGMVolume = "BGMVolume";
-        private const string KeySEVolume = "SEVolume";
-        private const string KeyUIVolume = "UIVolume";
-        private const string KeyAmbientVolume = "AmbientVolume";
+        [Header("MixerNameSettings")]
+        [SerializeField] private const string KeyMasterVolume = "MasterVolume";
+        [SerializeField] private const string KeyBGMVolume = "BGMVolume";
+        [SerializeField] private const string KeySEVolume = "SEVolume";
+        [SerializeField] private const string KeyUIVolume = "UIVolume";
+        [SerializeField] private const string KeyAmbientVolume = "AmbientVolume";
 
 
         private void Awake()
