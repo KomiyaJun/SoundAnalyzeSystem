@@ -1,42 +1,41 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewLayeredSoundData", menuName = "Sound/LayeredBGM")]
-public class LayeredSoundData : ScriptableObject
+namespace MyGame.AudioSetting
 {
-    [Header("Core Layers")]
-    public AudioClip melody;
-    public AudioClip chords;
-    public AudioClip bass;
-    public AudioClip drums;
-
-    [Header("Extra Layers")]
-    public AudioClip[] extras;
-
-    public float fadeDuration = 1.0f;
-
-    //配列として全て返す
-    public AudioClip[] GetAllClips()
+    [CreateAssetMenu(fileName = "NewLayeredSoundData", menuName = "Sound/LayeredBGM")]
+    public class LayeredSoundData : ScriptableObject
     {
-        int extraCount = (extras != null) ? extras.Length : 0;
-        AudioClip[] all = new AudioClip[4 + extraCount];
-        all[0] = melody;
-        all[1] = chords;
-        all[2] = bass;
-        all[3] = drums;
-        for(int i = 0; i < extraCount; i++)
-        {
-            all[i+4] = extras[i];
-        }
-        return all;
-    }
-}
+        [Header("Optional")]
+        public AudioClip introMelody;
+        public AudioClip introCords;
+        public AudioClip introBass;
+        public AudioClip introDrums;
 
-public enum BgmPartType
-{
-    Melody,
-    Chords,
-    Bass,
-    Drums,
-    Extra1,
-    Extra2,
+        [Header("Core Layers")]
+        public AudioClip melody;
+        public AudioClip chords;
+        public AudioClip bass;
+        public AudioClip drums;
+
+        [Header("Extra Layers")]
+        public AudioClip[] extras;
+
+        public float fadeDuration = 1.0f;
+
+        //配列として全て返す
+        public AudioClip[] GetAllClips()
+        {
+            int extraCount = (extras != null) ? extras.Length : 0;
+            AudioClip[] all = new AudioClip[4 + extraCount];
+            all[0] = melody;
+            all[1] = chords;
+            all[2] = bass;
+            all[3] = drums;
+            for (int i = 0; i < extraCount; i++)
+            {
+                all[i + 4] = extras[i];
+            }
+            return all;
+        }
+    }
 }

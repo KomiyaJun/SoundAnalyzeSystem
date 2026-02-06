@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using MyGame.AudioSetting;
 
 public class ZoneTrigger : MonoBehaviour
 {
@@ -10,11 +11,13 @@ public class ZoneTrigger : MonoBehaviour
     public UnityEvent OnEnterZone;
     public UnityEvent OnExitZone;
 
+    private bool isEntered = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(targetTag))
         {
             OnEnterZone.Invoke();
+            isEntered = true;
         }
     }
 
@@ -23,6 +26,7 @@ public class ZoneTrigger : MonoBehaviour
         if (collision.CompareTag(targetTag))
         {
             OnExitZone.Invoke();
+            isEntered = false;
         }
     }
 }

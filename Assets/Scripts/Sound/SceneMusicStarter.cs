@@ -1,10 +1,15 @@
 using UnityEngine;
+using MyGame.AudioSetting;
 
 public class SceneMusicStarter : MonoBehaviour
 {
+    [Header("Options")]
+    [Space(10)]
     [SerializeField] private float crossFadeTime = 2.0f;
     [Header("単一BGM再生[false] or レイヤー再生[true]")]
     [SerializeField] private bool isLayeredBGM = false;
+    [Header("イントロ後に再生")]
+    [SerializeField] private bool isIntro = false;
 
     [Header("単一のBGM再生")]
     [SerializeField] private SoundData sceneBGM;
@@ -30,8 +35,15 @@ public class SceneMusicStarter : MonoBehaviour
         {
             if(layeredBGM != null)
             {
-                SoundService.Instance.PlayLayeredBGM(layeredBGM);
-                SoundService.Instance.SetAllLayersVolume(1);
+                if (!isIntro)
+                {
+                    SoundService.Instance.PlayLayeredBGM(layeredBGM);
+                }
+                else
+                {
+                    SoundService.Instance.PlayLayeredBGMWithIntro(layeredBGM);
+                }
+                    SoundService.Instance.SetAllLayersVolume(1);
             }
         }
 

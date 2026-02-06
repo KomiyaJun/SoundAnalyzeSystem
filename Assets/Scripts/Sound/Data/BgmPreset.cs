@@ -1,28 +1,31 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBgmPreset", menuName = "Sound/BgmPreset")]
-public class BgmPreset : ScriptableObject
+namespace MyGame.AudioSetting
 {
-    [Range(0f, 1f)] public float melodyVolume = 1f;
-    [Range(0f, 1f)] public float chordsVolume = 1f;
-    [Range(0f, 1f)] public float bassVolume = 1f;
-    [Range(0f, 1f)] public float drumsVolume = 1f;
-    [Range(0f, 1f)] public float[] extraVolumes;
-
-    public float[] GetVolumeArray()
+    [CreateAssetMenu(fileName = "NewBgmPreset", menuName = "Sound/BgmPreset")]
+    public class BgmPreset : ScriptableObject
     {
-        int extraCount = (extraVolumes != null) ? extraVolumes.Length : 0;
-        float[] v = new float[4 +  extraCount];
-        v[0] = melodyVolume;
-        v[1] = chordsVolume;
-        v[2] = bassVolume;
-        v[3] = drumsVolume;
-        for(int i = 0; i < extraCount; i++)
+        [Range(0f, 1f)] public float melodyVolume = 1f;
+        [Range(0f, 1f)] public float chordsVolume = 1f;
+        [Range(0f, 1f)] public float bassVolume = 1f;
+        [Range(0f, 1f)] public float drumsVolume = 1f;
+        [Range(0f, 1f)] public float[] extraVolumes;
+
+        public float[] GetVolumeArray()
         {
-            v[i + 4] = extraVolumes[i];
+            int extraCount = (extraVolumes != null) ? extraVolumes.Length : 0;
+            float[] v = new float[4 + extraCount];
+            v[0] = melodyVolume;
+            v[1] = chordsVolume;
+            v[2] = bassVolume;
+            v[3] = drumsVolume;
+            for (int i = 0; i < extraCount; i++)
+            {
+                v[i + 4] = extraVolumes[i];
+            }
+            return v;
         }
-        return v;
+
+
     }
-
-
 }
