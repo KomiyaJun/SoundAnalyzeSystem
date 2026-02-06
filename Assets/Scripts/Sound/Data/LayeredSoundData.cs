@@ -36,13 +36,3 @@ public class LayeredSoundData : ScriptableObject
         return all;
     }
 }
-
-public enum BgmPartType
-{
-    Melody,
-    Chords,
-    Bass,
-    Drums,
-    Extra1,
-    Extra2,
-}

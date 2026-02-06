@@ -7,9 +7,9 @@ public class SoundBridge : MonoBehaviour
 
     [SerializeField] private float defaultFadeDuration = 1.0f;
 
-    public void SetEnviroment(string snapshotName)
+    public void PlaySE(SoundData data)
     {
-        SoundService.Instance.SetEnvironment(snapshotName,defaultFadeDuration);
+        SoundService.Instance.PlaySE(data);
     }
 
     public void PlayBGM(SoundData data)
@@ -17,12 +17,7 @@ public class SoundBridge : MonoBehaviour
         SoundService.Instance.PlayBGM(data, defaultFadeDuration);
     }
 
-    public void PlaySE(SoundData data)
-    {
-        SoundService.Instance.PlaySE(data);
-    }
-
-    public void PlayLayerBGM(LayeredSoundData data)
+    public void PlayLayeredBGM(LayeredSoundData data)
     {
         SoundService.Instance.PlayLayeredBGM(data);
     }
@@ -32,8 +27,28 @@ public class SoundBridge : MonoBehaviour
         SoundService.Instance.PlayLayeredBGMWithIntro(data);
     }
 
+    public void PlayAmbient(SoundData data)
+    {
+        SoundService.Instance.PlayAmbient(data, defaultFadeDuration);
+    }
+
+    public void StopBGM()
+    {
+        SoundService.Instance.StopBGM(defaultFadeDuration);
+    }
+
+    public void StopAmbient()
+    {
+        SoundService.Instance.StopAmbient(defaultFadeDuration);
+    }
+
     public void ActivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, defaultFadeDuration);
     public void DeactivateLayer(BgmPartType part) => SoundService.Instance.SetLayerVolume(part, defaultFadeDuration);
+
+    public void SetEnviroment(string snapshotName)
+    {
+        SoundService.Instance.SetEnvironment(snapshotName, defaultFadeDuration);
+    }
 
     public void SetAllLayersVolume(float volume)
     {
@@ -43,21 +58,6 @@ public class SoundBridge : MonoBehaviour
     public void ApplyPreset(BgmPreset preset)
     {
         SoundService.Instance.ApplyPreset(preset,defaultFadeDuration);
-    }
-
-    public void StopBGM()
-    {
-        SoundService.Instance.StopBGM(defaultFadeDuration);
-    }
-
-    public void StartAmbient(SoundData data)
-    {
-        SoundService.Instance.PlayAmbient(data, defaultFadeDuration);
-    }
-
-    public void StopAmbient()
-    {
-        SoundService.Instance.StopAmbient(defaultFadeDuration);
     }
 
 }
