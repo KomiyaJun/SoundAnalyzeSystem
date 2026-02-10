@@ -312,6 +312,34 @@ namespace MyGame.AudioSetting
             }
         }
 
+        //w’èƒŒƒCƒ„[‚ÌAudioSource‚ğæ“¾
+        public AudioSource GetLayerSource(int index)
+        {
+            if( index >= 0 && index < _layerSources.Count)
+            {
+                return _layerSources[index];
+            }
+
+            return null;
+
+        }
+        public AudioSource GetLayerSource(BgmPartType part)
+        {
+            int index = (int)part;
+            if (index >= 0 && index < _layerSources.Count)
+            {
+                return _layerSources[index];
+            }
+            return null;
+        }
+
+
+
+        //’ÊíBGM‚ÌAudioSource‚ğæ“¾
+        public AudioSource GetBGMSource()
+        {
+            return _activeBgmSource;
+        }
 
         //----------------ˆÈ‰º“à•”ˆ—----------------
 

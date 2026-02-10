@@ -42,7 +42,12 @@ namespace MyGame.AudioSetting
         //音量プリセットを使って音量を調節
         void ApplyPreset(BgmPreset preset, float duratio = 1.0f);
 
+        //指定レイヤーのAudioSourceを取得
+        AudioSource GetLayerSource(int index);
+        AudioSource GetLayerSource(BgmPartType part);
 
+        //通常のBGMのAudioSorceを取得
+        AudioSource GetBGMSource();
 
     }
 }
