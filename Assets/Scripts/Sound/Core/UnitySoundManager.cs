@@ -323,12 +323,34 @@ namespace MyGame.AudioSetting
             return null;
 
         }
+        //上記メソッドのpart指定バージョン
         public AudioSource GetLayerSource(BgmPartType part)
         {
             int index = (int)part;
+            int layerCount = 4;
+
             if (index >= 0 && index < _layerSources.Count)
             {
-                return _layerSources[index];
+                var primarySource = _layerSources[index];
+
+                if (primarySource.isPlaying)
+                {
+                    return primarySource;
+                }
+
+                int loopIndex = index + layerCount;
+
+                if(loopIndex < _layerSources.Count)
+                {
+                    var secondarySource = _layerSources[loopIndex];
+
+                    if (secondarySource.isPlaying)
+                    {
+                        return secondarySource;
+                    }
+                }
+                return primarySource;
+
             }
             return null;
         }
