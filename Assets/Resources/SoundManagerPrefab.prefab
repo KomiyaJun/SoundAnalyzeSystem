@@ -308,3 +308,12 @@ MonoBehaviour:
   sePoolSize: 20
   sePrefab: {fileID: 8304500305715729678}
   _ambientSource: {fileID: 4610744074363162573}
+  partMixerSettings:
+  - type: 0
+    group: {fileID: 5943719775112607000, guid: 96dca43a3c039d54dbb28d81724480d4, type: 2}
+  - type: 1
+    group: {fileID: -5716598933383785518, guid: 96dca43a3c039d54dbb28d81724480d4, type: 2}
+  - type: 2
+    group: {fileID: -3865888165875250657, guid: 96dca43a3c039d54dbb28d81724480d4, type: 2}
+  - type: 3
+    group: {fileID: -545974559140227575, guid: 96dca43a3c039d54dbb28d81724480d4, type: 2}
