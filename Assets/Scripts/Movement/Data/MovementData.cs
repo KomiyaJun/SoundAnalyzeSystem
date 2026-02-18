@@ -4,6 +4,8 @@ using UnityEngine;
 public class MovementData : ScriptableObject
 {
     public float moveSpeed = 5;
+    public float runSpeed = 10;
+    public float drag = 0f;
     public float jumpForce = 10f;
     public float gravityScale = 1.0f;
     public float friction = 0.1f;

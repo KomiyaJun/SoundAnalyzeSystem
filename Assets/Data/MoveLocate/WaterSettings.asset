@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: WaterSettings
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  jumpForce: 10
-  gravityScale: 1
+  runSpeed: 10
+  drag: 0
+  jumpForce: 5
+  gravityScale: 0.05
   friction: 0
   acceleration: 1

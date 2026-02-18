@@ -13,7 +13,15 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private float lerpSpeed = 15f;
     [SerializeField] private float minHeight = 0.2f;
 
-    private float currentYScale = 0f;
+    private enum VisualizeType
+    {
+        Scale,
+        Rotate,
+    }
+    [SerializeField] private VisualizeType visualizeType = VisualizeType.Scale;
+
+
+    private float currentYValue = 0f;
     void Update()
     {
         var analyzer = AudioAnalyzeService.Instance;
@@ -24,18 +32,35 @@ public class Visualizer : MonoBehaviour
         float boost = 1f + (freqPosition * highFreqBoost);
         float targetVol = rawVol * baseMultiple * boost;
 
-        if(targetVol > currentYScale)
+        if(targetVol > currentYValue)
         {
-            currentYScale = targetVol;
+            currentYValue = targetVol;
         }
         else
         {
-            currentYScale = Mathf.Lerp(currentYScale, targetVol, Time.deltaTime * lerpSpeed);   //Time使用
+            currentYValue = Mathf.Lerp(currentYValue, targetVol, Time.deltaTime * lerpSpeed);   //Time使用
         }
 
-        float finalY = Mathf.Max(minHeight, currentYScale);
-        Vector3 originalScale = transform.localScale;
-        transform.localScale = new Vector3(originalScale.x, finalY, originalScale.z);
+        float finalY = Mathf.Max(minHeight, currentYValue);
+
+        switch (visualizeType)
+        {
+            case VisualizeType.Scale:
+                Vector3 originalScale = transform.localScale;
+                transform.localScale = new Vector3(originalScale.x, finalY, originalScale.z);
+                break;
+            case VisualizeType.Rotate:
+                Vector3 originalRotate = transform.localEulerAngles;
+
+                float targetAngles = finalY * 180f;
+
+                transform.localEulerAngles = new Vector3(originalRotate.x, originalRotate.y, targetAngles);
+                break;
+
+            default:
+
+                break;
+        }
 
     }
 }
