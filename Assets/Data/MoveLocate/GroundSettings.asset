@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: GroundSettings
   m_EditorClassIdentifier: 
   moveSpeed: 20
+  runSpeed: 40
+  drag: 0
   jumpForce: 10
   gravityScale: 1
   friction: 0.1

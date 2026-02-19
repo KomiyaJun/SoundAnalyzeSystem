@@ -62,5 +62,19 @@ namespace MyGame.AudioSetting
             SoundService.Instance.ApplyPreset(preset, defaultFadeDuration);
         }
 
+        public void GetLayerSource(int index)
+        {
+            SoundService.Instance.GetLayerSource(index);
+        }
+        public void GetLayerSource(BgmPartType part)
+        {
+            SoundService.Instance.GetLayerSource(part);
+        }
+
+        public void GetBGMSource()
+        {
+            SoundService.Instance.GetBGMSource();
+        }
+
     }
 }

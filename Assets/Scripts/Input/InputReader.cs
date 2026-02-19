@@ -22,13 +22,33 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
 
     #region playerAction
     public event Action<Vector2> MoveEvent;
+    public event Action DashStartEvent;
+    public event Action DashEndEvent;
+
     public event Action JumpEvent;
+    public event Action JumpEndEvent;
+
     public event Action AttackEvent;
+
+    public event Action InteractEvent;
+    public event Action InteractEndEvent;
 
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 value = context.ReadValue<Vector2>();
         MoveEvent?.Invoke(value);
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            DashStartEvent?.Invoke();
+        }
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            DashEndEvent?.Invoke();
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -37,7 +57,24 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
         {
             JumpEvent?.Invoke();
         }
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            JumpEndEvent?.Invoke();
+        }
     }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            InteractEvent?.Invoke();
+        }
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            InteractEndEvent?.Invoke();
+        }
+    }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
         AttackEvent?.Invoke();

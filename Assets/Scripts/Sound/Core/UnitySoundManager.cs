@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using System;
 
 namespace MyGame.AudioSetting
 {
@@ -28,6 +29,16 @@ namespace MyGame.AudioSetting
         [SerializeField] private const string KeySEVolume = "SEVolume";
         [SerializeField] private const string KeyUIVolume = "UIVolume";
         [SerializeField] private const string KeyAmbientVolume = "AmbientVolume";
+
+        [Serializable]
+        public struct PartMixerSetting
+        {
+            public BgmPartType type;
+            public AudioMixerGroup group;
+        }
+
+        [Header("MixerSettings")]
+        [SerializeField] private List<PartMixerSetting> partMixerSettings;
 
 
         private void Awake()
@@ -80,7 +91,7 @@ namespace MyGame.AudioSetting
 
             source.volume = data.volume;
             source.pitch = data.useRandomPitch
-                ? data.pitch + Random.Range(-data.pitchRandomRange, data.pitchRandomRange)
+                ? data.pitch + UnityEngine.Random.Range(-data.pitchRandomRange, data.pitchRandomRange)
                 : data.pitch;
 
             source.gameObject.SetActive(true);
@@ -142,6 +153,14 @@ namespace MyGame.AudioSetting
                 _layerSources[i].loop = true;
                 _layerSources[i].volume = (i == 0) ? 1f : 0f; //最初のパート(ドラム等)以外は0で開始
 
+                //AudioSourceのoutput先を設定
+                AudioMixerGroup group = GetMixerGroup((BgmPartType)i);
+                if (group != null)
+                {
+                    _layerSources[i].outputAudioMixerGroup = group;
+                }
+
+
                 //精密予約再生
                 _layerSources[i].PlayScheduled(startTime);
             }
@@ -178,14 +197,23 @@ namespace MyGame.AudioSetting
 
             for (int i = 0; i < layerCount; i++)
             {
-                //イントロの予約
                 AudioSource introSrc = _layerSources[i];
+                AudioSource loopSrc = _layerSources[i + layerCount];
+
+                AudioMixerGroup group = GetMixerGroup((BgmPartType)i);
+
+                if (group != null)
+                {
+                    introSrc.outputAudioMixerGroup = group;
+                    loopSrc.outputAudioMixerGroup = group;
+                }
+
+                //イントロの予約
                 introSrc.clip = GetIntroClipByIndex(data, i);
                 introSrc.loop = false;
                 introSrc.PlayScheduled(introStartTime);
 
                 //メインループの予約
-                AudioSource loopSrc = _layerSources[i + layerCount];
                 loopSrc.clip = GetLoopClipByIndex(data, i);
                 loopSrc.loop = true;
                 loopSrc.PlayScheduled(loopStartTime);
@@ -312,6 +340,56 @@ namespace MyGame.AudioSetting
             }
         }
 
+        //指定レイヤーのAudioSourceを取得
+        public AudioSource GetLayerSource(int index)
+        {
+            if( index >= 0 && index < _layerSources.Count)
+            {
+                return _layerSources[index];
+            }
+
+            return null;
+
+        }
+        //上記メソッドのpart指定バージョン
+        public AudioSource GetLayerSource(BgmPartType part)
+        {
+            int index = (int)part;
+            int layerCount = 4;
+
+            if (index >= 0 && index < _layerSources.Count)
+            {
+                var primarySource = _layerSources[index];
+
+                if (primarySource.isPlaying)
+                {
+                    return primarySource;
+                }
+
+                int loopIndex = index + layerCount;
+
+                if(loopIndex < _layerSources.Count)
+                {
+                    var secondarySource = _layerSources[loopIndex];
+
+                    if (secondarySource.isPlaying)
+                    {
+                        return secondarySource;
+                    }
+                }
+                return primarySource;
+
+            }
+            return null;
+        }
+
+
+
+        //通常BGMのAudioSourceを取得
+        public AudioSource GetBGMSource()
+        {
+            return _activeBgmSource;
+        }
 
         //----------------以下内部処理----------------
 
@@ -492,6 +570,19 @@ namespace MyGame.AudioSetting
             3 => data.drums,
             _ => null,
         };
+
+        //パートに対応したアウトプット先を返す
+        private AudioMixerGroup GetMixerGroup(BgmPartType type)
+        {
+            foreach(var setting in partMixerSettings)
+            {
+                if(setting.type == type)
+                {
+                    return setting.group;
+                }
+            }
+            return null;
+        }
 
     }
 }
