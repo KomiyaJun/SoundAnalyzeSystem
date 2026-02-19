@@ -27,7 +27,11 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
 
     public event Action JumpEvent;
     public event Action JumpEndEvent;
+
     public event Action AttackEvent;
+
+    public event Action InteractEvent;
+    public event Action InteractEndEvent;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -59,6 +63,17 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
         }
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            InteractEvent?.Invoke();
+        }
+        if(context.phase == InputActionPhase.Canceled)
+        {
+            InteractEndEvent?.Invoke();
+        }
+    }
 
     public void OnAttack(InputAction.CallbackContext context)
     {

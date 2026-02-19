@@ -47,7 +47,6 @@ public class BpmAnalyzer : MonoBehaviour
             EstimatedBpm = 60f / avgInterval;
 
             OnBeatDetectedEvent?.Invoke();
-            Debug.Log($"Beat! Estimated BPM : {EstimatedBpm:F1}");
         }
 
         _lastHitTime = currentTime;

@@ -9,6 +9,9 @@ public class MoveRight : MonoBehaviour
     [Header("移動にかかる時間")]
     public float duration = 2.0f;
 
+    [Header("プレイヤータグ")]
+    [SerializeField] private string playerTag = "Player";
+
     public void StartMoving()
     {
         StartCoroutine(LerpMove());
@@ -35,4 +38,20 @@ public class MoveRight : MonoBehaviour
 
         transform.position = endPosition;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(playerTag))
+        {
+            collision.transform.SetParent(transform);
+        }
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(playerTag))
+        {
+            collision.transform.SetParent(null);
+        }
+    }
+
 }

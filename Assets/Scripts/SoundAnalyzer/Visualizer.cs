@@ -2,6 +2,15 @@ using UnityEngine;
 
 public class Visualizer : MonoBehaviour
 {
+    private enum VisualizeType
+    {
+        Scale,
+        Rotate,
+    }
+    [Header("変形タイプ")]
+    [SerializeField] private VisualizeType visualizeType = VisualizeType.Scale;
+
+    [Header("Min,Max")]
     [SerializeField] int minIndex = 0;
     [SerializeField] int maxIndex = 64;
 
@@ -13,12 +22,6 @@ public class Visualizer : MonoBehaviour
     [SerializeField] private float lerpSpeed = 15f;
     [SerializeField] private float minHeight = 0.2f;
 
-    private enum VisualizeType
-    {
-        Scale,
-        Rotate,
-    }
-    [SerializeField] private VisualizeType visualizeType = VisualizeType.Scale;
 
 
     private float currentYValue = 0f;
