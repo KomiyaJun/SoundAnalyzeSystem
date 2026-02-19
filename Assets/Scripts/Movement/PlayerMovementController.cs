@@ -20,7 +20,8 @@ public class PlayerMovementController : MonoBehaviour
     private Vector2 _inputDirection;
 
     private bool _isGround;
-    [SerializeField]private bool _isRunning;
+    private bool _isRunning;
+    private bool _canMove = true;
     private void Awake()
     {
         _currentLogic = new GroundMovement();
@@ -85,6 +86,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!_canMove) return;
+
         _currentLogic?.Move(_inputDirection, _rb, _currentData, _isRunning);
     }
 
@@ -108,4 +111,15 @@ public class PlayerMovementController : MonoBehaviour
         SetMovementState(new GroundMovement(), _groundSettings);
     }
 
+    public void SetControl(bool allow)
+    {
+        _canMove = allow;
+
+        if (!_canMove)
+        {
+            _inputDirection = Vector2.zero;
+            _rb.linearVelocity = Vector2.zero;
+            _isRunning = false;
+        }
+    }
 }

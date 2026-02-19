@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InteractiveMovingObject : MonoBehaviour
 {
@@ -15,6 +17,11 @@ public class InteractiveMovingObject : MonoBehaviour
 
     [Header("移動速度")]
     [SerializeField] private float moveSpeed = 1f;
+
+    [Header("イベント")]
+    public UnityEvent<float> OnValueChanged;
+    
+    private float _lastParam;
 
     [Range(0, 1)]
     public float currentRatio = 0f;
@@ -36,6 +43,12 @@ public class InteractiveMovingObject : MonoBehaviour
         transform.position = Vector2.Lerp(pointA.position, pointB.position, currentRatio);
 
         CurrentParam = Mathf.Lerp(paramA, paramB, currentRatio);
+
+        if(!Mathf.Approximately(CurrentParam, _lastParam))
+        {
+            OnValueChanged?.Invoke(CurrentParam);
+            _lastParam = CurrentParam;
+        }
     }
     
     public void HandlePush()
