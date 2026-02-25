@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4833744857055190818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2990789799374800259}
+  - component: {fileID: 7035399144156421478}
+  m_Layer: 0
+  m_Name: AnalyzeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2990789799374800259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4833744857055190818}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 4.94, y: -0.15, z: -0.16232172}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!114 &7035399144156421478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4833744857055190818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3d6c2754d5e33a4ead67039531fd62b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 2593095840603015029, guid: 7d1cde0102ceccb4584f0580be79e418, type: 3}
+  spacing: 1
+  reverse: 1
+  settingList:
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  - type: 0
+    minIndex: -1
+    maxIndex: -1
+  baseMultiple: 1000
+  highFreqBoost: 10
+  lerpSpeed: 15
+  minHeight: 0.2

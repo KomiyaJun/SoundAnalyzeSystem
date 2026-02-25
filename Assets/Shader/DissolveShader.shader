@@ -1,16 +1,16 @@
-Shader "Unlit/DissolveShader" 
+Shader "Unlit/DissolveShader_Manual"
 {
     Properties
     {
-        _StartTime("StartTime", Float) = 0.0
         _MainTex ("Texture", 2D) = "white" {}
         _NoiseTex ("Noise", 2D) = "white" {}
-        _Speed("Speed", float) = 0.0
-        _OutlineThickness("OutlineThickness", float) = 0.0
-        _OutlineStrength("OutlineStrength", float) = 0.0
+        // 時間の代わりに、0(表示)～1(消失) の値を直接指定する
+        _DissolveAmount ("Dissolve Amount", Range(0, 1)) = 0
+        _OutlineThickness("OutlineThickness", float) = 0.05
+        _OutlineStrength("OutlineStrength", float) = 1.0
         _OutlineColor("OutLine", Color) = (1,1,1,1)
-     }
-     
+    }
+    
     SubShader
     {
         Tags { "RenderType"="Opaque" "Queue" = "Transparent"}
@@ -22,7 +22,6 @@ Shader "Unlit/DissolveShader"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
             #include "UnityCG.cginc"
 
             struct appdata
@@ -42,9 +41,8 @@ Shader "Unlit/DissolveShader"
             float4 _MainTex_ST;
             fixed4 _OutlineColor;
             float _OutlineStrength;
-            float _Speed;
             float _OutlineThickness;
-            float _StartTime;
+            float _DissolveAmount; // ここで数値を受け取る
 
             v2f vert (appdata v)
             {
@@ -56,16 +54,33 @@ Shader "Unlit/DissolveShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float currentTime = _Time.y;
-                float passedTime  = currentTime - _StartTime;
                 fixed4 col   = tex2D(_MainTex, i.uv);
                 fixed4 noise = tex2D(_NoiseTex, i.uv);
-                col.a   *= step(passedTime/80 * _Speed, noise);
-                col.rgb += step(noise,(passedTime/80+_OutlineThickness) * _Speed) 
-                         * _OutlineColor *_OutlineStrength;
+
+                // ノイズの明るさが DissolveAmount より低い場所を消す
+                float clipVal = noise.r - _DissolveAmount;
+
+                // 消失処理 (step関数で 0 か 1 にする)
+                // noise < amount の場合、描画しない(透明にする)
+                if (clipVal < 0)
+                {
+                    // アルファを0にする、または discard で描画をスキップ
+                    col.a = 0;
+                    // discard; // 完全に消す場合はこちらでもOK
+                }
+                else
+                {
+                    // アウトライン処理
+                    // 消える寸前の部分（clipValがThickness未満の場所）を発光させる
+                    if (clipVal < _OutlineThickness)
+                    {
+                        col.rgb += _OutlineColor * _OutlineStrength;
+                    }
+                }
+                
                 return col;
             }
             ENDCG
         }
     }
-} 
+}

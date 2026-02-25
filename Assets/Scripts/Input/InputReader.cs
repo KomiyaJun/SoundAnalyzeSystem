@@ -33,6 +33,7 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public event Action InteractEvent;
     public event Action InteractEndEvent;
 
+    public event Action<float> ParamateEvent;
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 value = context.ReadValue<Vector2>();
@@ -78,6 +79,15 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public void OnAttack(InputAction.CallbackContext context)
     {
         AttackEvent?.Invoke();
+    }
+
+    public void OnParamate(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            float value = context.ReadValue<float>();
+            ParamateEvent?.Invoke(value);
+        }
     }
     #endregion
 

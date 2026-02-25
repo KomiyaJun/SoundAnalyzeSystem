@@ -13,22 +13,14 @@ namespace MyGame.AudioSetting
         [SerializeField] private AudioSource _ambientSource;
 
 
-        private List<AudioSource> _layerSources = new List<AudioSource>();
-        private List<AudioSource> _sePool = new List<AudioSource>();
-
-        private Dictionary<AudioSource, Coroutine> _activeLayerFades = new Dictionary<AudioSource, Coroutine>();
-
-        [Header("BGMSettings")]
-        private AudioSource _activeBgmSource;
-        private AudioSource _inactiveBgmSource;
-        private Coroutine _fadeCoroutine;
-
         [Header("MixerNameSettings")]
         [SerializeField] private const string KeyMasterVolume = "MasterVolume";
         [SerializeField] private const string KeyBGMVolume = "BGMVolume";
         [SerializeField] private const string KeySEVolume = "SEVolume";
         [SerializeField] private const string KeyUIVolume = "UIVolume";
         [SerializeField] private const string KeyAmbientVolume = "AmbientVolume";
+
+        [SerializeField] private const string pitchShitName = "BgmPitchShift";
 
         [Serializable]
         public struct PartMixerSetting
@@ -39,6 +31,21 @@ namespace MyGame.AudioSetting
 
         [Header("MixerSettings")]
         [SerializeField] private List<PartMixerSetting> partMixerSettings;
+
+        private Coroutine _fadeCoroutine;
+
+        private List<AudioSource> _layerSources = new List<AudioSource>();
+        private List<AudioSource> _sePool = new List<AudioSource>();
+
+        private Dictionary<AudioSource, Coroutine> _activeLayerFades = new Dictionary<AudioSource, Coroutine>();
+
+        private AudioSource _activeBgmSource;
+        private AudioSource _inactiveBgmSource;
+
+
+
+
+        public float CurrentBgmPitch { get; private set; } = 1.0f;
 
 
         private void Awake()
@@ -290,7 +297,11 @@ namespace MyGame.AudioSetting
         public void SetLayerVolume(BgmPartType part, float volume, float duration)
         {
             int index = (int)part;
+            int layerCount = 4; 
+
+            //アクティブでないものも音量変更
             ExecuteLayerFade(index, volume, duration);
+            ExecuteLayerFade(index + layerCount, volume, duration);
         }
         //レイヤーのボリュームを変更(index)
         public void SetLayerVolume(int index, float volume, float duration)
@@ -340,6 +351,27 @@ namespace MyGame.AudioSetting
             }
         }
 
+        //再生中の曲の再生スピードを変更
+        public void SetBgmPlaybackSpeed(float speed)
+        {
+            //ピッチを変更して曲の速さを変更
+            float clampedSpeed = Mathf.Clamp(speed, -2.0f, 2.0f);
+            CurrentBgmPitch = clampedSpeed;
+
+            if (_activeBgmSource != null) _activeBgmSource.pitch = clampedSpeed;
+            if (_inactiveBgmSource != null) _inactiveBgmSource.pitch = clampedSpeed;
+
+            foreach (var source in _layerSources)
+            {
+                if (source != null) source.pitch = clampedSpeed;
+            }
+
+            //音程を逆に補正して変わらないようにする
+            float shiftValue = 1.0f / clampedSpeed;
+            mixer.SetFloat(pitchShitName, shiftValue);
+        }
+
+
         //指定レイヤーのAudioSourceを取得
         public AudioSource GetLayerSource(int index)
         {
@@ -383,13 +415,12 @@ namespace MyGame.AudioSetting
             return null;
         }
 
-
-
         //通常BGMのAudioSourceを取得
         public AudioSource GetBGMSource()
         {
             return _activeBgmSource;
         }
+
 
         //----------------以下内部処理----------------
 
@@ -420,6 +451,17 @@ namespace MyGame.AudioSetting
             if (index < 0 || index >= _layerSources.Count) return;
 
             AudioSource source = _layerSources[index];
+
+            if(duration <= 0.001f)
+            {
+                if(_activeLayerFades.ContainsKey(source) && _activeLayerFades[source] != null)
+                {
+                    StopCoroutine(_activeLayerFades[source]);
+                    _activeLayerFades[source] = null;
+                }
+                source.volume = volume;
+                return;
+            }
 
             if (_activeLayerFades.ContainsKey(source) && _activeLayerFades[source] != null)
             {

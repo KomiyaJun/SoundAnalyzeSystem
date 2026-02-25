@@ -30,7 +30,7 @@ namespace MyGame.AudioSetting
         void SetVolume(VolumeType type, float volume);
 
         //レイヤーのindexに該当する部分の音量を調整
-        void SetLayerVolume(BgmPartType part, float volume, float duration = 0.5f);
+        void SetLayerVolume(BgmPartType part, float volume, float duration = 0.0f);
         void SetLayerVolume(int index, float volume, float duration);
 
         //環境によってのスナップショット変化
@@ -41,6 +41,8 @@ namespace MyGame.AudioSetting
 
         //音量プリセットを使って音量を調節
         void ApplyPreset(BgmPreset preset, float duratio = 1.0f);
+
+        void SetBgmPlaybackSpeed(float speed);
 
         //指定レイヤーのAudioSourceを取得
         AudioSource GetLayerSource(int index);
