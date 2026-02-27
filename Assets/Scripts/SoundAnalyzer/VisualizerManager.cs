@@ -11,6 +11,9 @@ public class VisualizerManager : MonoBehaviour
         [Header("w’è‘Ñˆæ(-1‚È‚ç©“®)")]
         public int minIndex = -1;
         public int maxIndex = -1;
+
+        [Header("ŒÂ•Ê‚Ì”½“]İ’è")]
+        public bool reverseValue = false;
     }
 
     [Header("¶¬İ’è")]
@@ -24,6 +27,7 @@ public class VisualizerManager : MonoBehaviour
     [SerializeField] private float highFreqBoost = 10f;
     [SerializeField] private float lerpSpeed = 15f;
     [SerializeField] private float minHeight = 0.2f;
+    [SerializeField] private float maxValue = 10f;
 
     void Start()
     {
@@ -53,7 +57,7 @@ public class VisualizerManager : MonoBehaviour
             var instance = obj.GetComponent<VisualizerInstance>();
             if(instance != null)
             {
-                instance.SetUp(settings.type,finalMin, finalMax,baseMultiple, highFreqBoost, lerpSpeed, minHeight);
+                instance.SetUp(settings.type,finalMin, finalMax,baseMultiple, highFreqBoost, lerpSpeed, minHeight, maxValue,settings.reverseValue);
             }
         }
     }

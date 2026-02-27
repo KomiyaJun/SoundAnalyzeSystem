@@ -2,15 +2,15 @@ using MyGame.AudioSetting;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
 {
     [Header("ê›íË")]
-    [SerializeField] private List<BgmPartType> targetPart = new List<BgmPartType>();    //ëŒè€ÇÃäyäÌ
+    [SerializeField] private AudioAnalyzerPreset defaultPreset;    //ëŒè€ÇÃäyäÌ
     [SerializeField] private int sampleCount = 512;     //FFTÇÃâëúìx
     [SerializeField] private FFTWindow windowType = FFTWindow.BlackmanHarris; //ëãä÷êî
     
-    private AudioSource _targetSource;
     private float[] _spectrumData;
     private float[] _tempBuffer;
 
@@ -19,13 +19,24 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
     /// </summary>
     public float[] SpectrumData => _spectrumData;
 
+    private IReadOnlyList<BgmPartType> _currentTargetParts;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         _spectrumData = new float[sampleCount];
         _tempBuffer = new float[sampleCount];
 
-        AudioAnalyzeService.Provide(this);
+        if(defaultPreset != null)
+        {
+            SetPreset(defaultPreset);
+        }
+        else
+        {
+            _currentTargetParts = new List<BgmPartType>();
+        }
+
+            AudioAnalyzeService.Provide(this);
     }
 
     private void OnDestroy()
@@ -41,14 +52,16 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
     {
         Array.Clear(_spectrumData, 0, _spectrumData.Length);
         if (SoundService.Instance == null) return;
+        if (_currentTargetParts == null) return;
 
-        foreach(var part in targetPart)
+
+        foreach(var part in _currentTargetParts)
         {
             AudioSource source = SoundService.Instance.GetLayerSource(part);
 
             if(source != null && source.isPlaying)
             {
-                source.GetSpectrumData(_spectrumData, 0, windowType);
+                source.GetSpectrumData(_tempBuffer, 0, windowType);
 
                 for(int i = 0; i < sampleCount; i++)
                 {
@@ -83,5 +96,14 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
     public float[] GetRawSpectrumData()
     {
         return _spectrumData;
+    }
+
+    public void SetPreset(AudioAnalyzerPreset preset)
+    {
+        if(preset == null) return;
+
+        _currentTargetParts = preset.TargetParts;
+
+        Array.Clear(_spectrumData,0, _spectrumData.Length);
     }
 }

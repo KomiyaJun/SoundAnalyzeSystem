@@ -15,10 +15,13 @@ public class VisualizerInstance : MonoBehaviour
     private float highFreqBoost;
     private float lerpSpeed;
     private float minHeight;
+    private float maxValue;
+    private bool reverseValue;
+
 
     private float currentYValue = 0f;
 
-    public void SetUp(VisualizeType type, int min, int max, float mult, float boost, float lerp, float minH)
+    public void SetUp(VisualizeType type, int min, int max, float mult, float boost, float lerp, float minH, float maxV, bool reverseV)
     {
         visualizeType = type;
         minIndex = min; 
@@ -27,6 +30,8 @@ public class VisualizerInstance : MonoBehaviour
         highFreqBoost = boost;
         lerpSpeed = lerp;
         minHeight = minH;
+        maxValue = maxV;
+        reverseValue = reverseV;
     }
 
     void Update()
@@ -40,11 +45,19 @@ public class VisualizerInstance : MonoBehaviour
         float targetVol = rawVol * baseMultiple * boost;
 
         if (targetVol > currentYValue)
+        {
             currentYValue = targetVol;
+        }
         else
+        {
             currentYValue = Mathf.Lerp(currentYValue, targetVol, Time.deltaTime * lerpSpeed);
+        }
 
-        float finalY = Mathf.Max(minHeight, currentYValue);
+        float finalY = Mathf.Clamp(currentYValue, minHeight, maxValue);
+        if (reverseValue)
+        {
+            finalY *= -1f;
+        }
 
         if (visualizeType == VisualizeType.Scale)
         {

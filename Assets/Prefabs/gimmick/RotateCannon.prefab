@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8066644014520117388}
   - component: {fileID: 6487466880991948118}
-  - component: {fileID: 7630025300971477741}
+  - component: {fileID: 8912407163759910742}
   m_Layer: 0
   m_Name: RotateCannon
   m_TagString: Untagged
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7630025300971477741
+--- !u!114 &8912407163759910742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,16 +98,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 421932968221329369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a27b5896b7d9644b055c2cd1fec295, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e00d7cf1ce99b847b84cda4f555a4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIndex: 0
-  maxIndex: 64
-  baseMultiple: 1000
-  highFreqBoost: 10
-  lerpSpeed: 15
-  minHeight: 0.2
-  visualizeType: 1
 --- !u!1 &3201612106171150659
 GameObject:
   m_ObjectHideFlags: 0

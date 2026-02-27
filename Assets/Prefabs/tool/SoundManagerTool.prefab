@@ -44,35 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49240fa89c2b7af44be0a79431807d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thereshold: 0.002
-  coolDownTime: 0.1
-  OnBeatDetectedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MoveRight, Assembly-CSharp
-        m_MethodName: StartMoving
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MoveRight, Assembly-CSharp
-        m_MethodName: StartMoving
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  BeadEvent: {fileID: 11400000, guid: e0eb1c1eace42ff4ea68b5225de00b1d, type: 2}
+  threshold: 0.002
+  baseCoolDownTime: 0
 --- !u!1 &7416706743253647445
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +56,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6047072173859631772}
-  - component: {fileID: 8905417114117005537}
+  - component: {fileID: 7093898449705401155}
   m_Layer: 0
   m_Name: AudioAnalyzer
   m_TagString: Untagged
@@ -105,7 +79,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7416563029258346436}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8905417114117005537
+--- !u!114 &7093898449705401155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,9 +88,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7416706743253647445}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f24734dc16b2d4a88ceb05f8de38df, type: 3}
+  m_Script: {fileID: 11500000, guid: f8c0f585dd1dd8a47baf6a6fe032a9a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPart: 00000000010000000200000003000000
   sampleCount: 1024
   windowType: 5
 --- !u!1 &8118716952872905454

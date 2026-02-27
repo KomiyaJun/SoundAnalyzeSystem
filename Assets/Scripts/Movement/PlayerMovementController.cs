@@ -122,4 +122,18 @@ public class PlayerMovementController : MonoBehaviour
             _isRunning = false;
         }
     }
+
+    // ギズモ（デバッグ表示）の描画
+    private void OnDrawGizmosSelected()
+    {
+        // FeetPosが割り当てられていない場合のエラー回避
+        if (_feetPos == null) return;
+
+        // 接地しているなら緑、していないなら赤にする
+        // （プレイ中でない場合は常に赤になります）
+        Gizmos.color = _isGround ? Color.green : Color.red;
+
+        // OverlapCircleと同じ範囲をワイヤーフレームの球体（円）として描画
+        Gizmos.DrawWireSphere(_feetPos.position, _groundCheckRadius);
+    }
 }

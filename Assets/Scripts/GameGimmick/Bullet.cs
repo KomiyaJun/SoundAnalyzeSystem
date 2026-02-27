@@ -5,6 +5,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float speed = 10f;
     [SerializeField] private float lifeTime = 10f;
 
+    [SerializeField] private LayerMask groundLayerMask;
+
     private Rigidbody2D _rb;
 
     private void Awake()
@@ -22,6 +24,11 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        bool isGroundLayer = (groundLayerMask.value & (1 << collision.gameObject.layer)) > 0;
 
+        if(isGroundLayer || collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
