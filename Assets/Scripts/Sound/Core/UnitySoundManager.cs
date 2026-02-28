@@ -339,7 +339,7 @@ namespace MyGame.AudioSetting
         public void ApplyPreset(BgmPreset preset, float duration = 0.5f)
         {
             float[] targetVolumes = preset.GetVolumeArray();
-
+            int layerCount = 4;
 
             for (int i = 0; i < targetVolumes.Length; i++)
             {
@@ -348,7 +348,14 @@ namespace MyGame.AudioSetting
                 {
                     ExecuteLayerFade(i, targetVolumes[i], duration);
                 }
+
+                int loopIndex = i + layerCount;
+                if(loopIndex < _layerSources.Count)
+                {
+                    ExecuteLayerFade(loopIndex, targetVolumes[i], duration);
+                }
             }
+
         }
 
         //再生中の曲の再生スピードを変更

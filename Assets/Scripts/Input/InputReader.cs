@@ -34,6 +34,8 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public event Action InteractEndEvent;
 
     public event Action<float> ParamateEvent;
+
+    public event Action OptionEvent;
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 value = context.ReadValue<Vector2>();
@@ -98,16 +100,29 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
 
     public void OnNavigate(InputAction.CallbackContext context)
     {
-        Vector2 value = context.ReadValue<Vector2>();
-        NavigateEvent?.Invoke(value);
+
     }
     public void OnSubmit(InputAction.CallbackContext context)
     {
-        SubmitEvent?.Invoke();
+        if (context.phase == InputActionPhase.Performed)
+        {
+            SubmitEvent?.Invoke();
+        }
     }
     public void OnCancel(InputAction.CallbackContext context)
     {
-        CancelEvent?.Invoke();
+        if (context.phase == InputActionPhase.Performed)
+        {
+            CancelEvent?.Invoke();
+        }
+    }
+
+    public void OnOption(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            OptionEvent?.Invoke();
+        }
     }
     #endregion
 

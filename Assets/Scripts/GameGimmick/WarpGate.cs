@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WarpGate : MonoBehaviour, IInteractable
 {
+    [Header("“ü‚Á‚½")]
+    public UnityEvent EnterEvent;
+
     [Header("QÆ")]
     [SerializeField] private InputReader _inputReader;
 
@@ -29,6 +33,7 @@ public class WarpGate : MonoBehaviour, IInteractable
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if(player != null)
         {
+            EnterEvent?.Invoke();
             Warp(player);
         }
     }

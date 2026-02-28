@@ -8,7 +8,7 @@ namespace MyGame.AudioSetting
         [Range(0f, 1f)] public float melodyVolume = 1f;
         [Range(0f, 1f)] public float chordsVolume = 1f;
         [Range(0f, 1f)] public float bassVolume = 1f;
-        [Range(0f, 1f)] public float drumsVolume = 1f;
+        [Range(0f, 1f)] public float drumVolume = 1f;
         [Range(0f, 1f)] public float[] extraVolumes;
 
         public float[] GetVolumeArray()
@@ -18,7 +18,7 @@ namespace MyGame.AudioSetting
             v[0] = melodyVolume;
             v[1] = chordsVolume;
             v[2] = bassVolume;
-            v[3] = drumsVolume;
+            v[3] = drumVolume;
             for (int i = 0; i < extraCount; i++)
             {
                 v[i + 4] = extraVolumes[i];

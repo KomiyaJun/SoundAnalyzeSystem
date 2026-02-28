@@ -19,8 +19,7 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
     /// </summary>
     public float[] SpectrumData => _spectrumData;
 
-    private IReadOnlyList<BgmPartType> _currentTargetParts;
-
+    private List<BgmPartType> _currentTargetParts = new List<BgmPartType>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -72,6 +71,7 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
 
     }
 
+    //解析データを取得
     public float GetBandAverage(int minIndex, int maxIndex)
     {
         if (_spectrumData == null || _spectrumData.Length == 0) return 0f;
@@ -93,17 +93,56 @@ public class AudioAnalyzer : MonoBehaviour , IAudioAnalyzer
         return (count > 0) ? sum / count : 0f;
     }
 
+    //生の解析データを取得
     public float[] GetRawSpectrumData()
     {
         return _spectrumData;
     }
 
+    //プリセットを利用してパートを切り替え
     public void SetPreset(AudioAnalyzerPreset preset)
     {
         if(preset == null) return;
 
-        _currentTargetParts = preset.TargetParts;
+        _currentTargetParts = preset.TargetParts.ToList();
 
         Array.Clear(_spectrumData,0, _spectrumData.Length);
+    }
+
+    //指定パートのオンオフを切り替え
+    public void TogglePart(BgmPartType part)
+    {
+        if (!_currentTargetParts.Contains(part))
+        {
+            _currentTargetParts.Add(part);
+        }
+        else
+        {
+            _currentTargetParts.Remove(part);
+        }
+    }
+
+    //指定パートをリストに追加
+    public void AddPart(BgmPartType part)
+    {
+        if(!_currentTargetParts.Contains(part))
+        {
+            _currentTargetParts.Add(part);
+        }
+    }
+
+    //指定パートをリストから削除
+    public void RemovePart(BgmPartType part)
+    {
+        if (_currentTargetParts.Contains(part))
+        {
+            _currentTargetParts.Remove(part);
+        }
+    }
+
+    //パートが含まれているか
+    public bool IsPartActive(BgmPartType part)
+    {
+        return _currentTargetParts != null && _currentTargetParts.Contains(part);
     }
 }
