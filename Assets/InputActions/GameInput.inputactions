@@ -246,6 +246,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "NextPage",
+                    "type": "Button",
+                    "id": "ad2dc86f-4208-4a88-8956-d758825e3243",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BackPage",
+                    "type": "Button",
+                    "id": "88b9c265-c851-47bf-bd17-9ed6eaecd915",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -296,7 +314,7 @@
                 {
                     "name": "",
                     "id": "ddbf2bff-f4d0-4fa2-aaa2-eacd0a1e3031",
-                    "path": "<Keyboard>/minus",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -323,6 +341,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ae67b7ac-d727-4865-bc3b-a641a2aa05e2",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextPage",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "24a5186d-7dbf-4af8-8b86-a39f2dc467f3",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackPage",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

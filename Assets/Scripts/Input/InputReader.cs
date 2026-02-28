@@ -98,6 +98,8 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public event Action SubmitEvent;
     public event Action CancelEvent;
 
+    public event Action NextPageEvent;
+    public event Action BackPageEvent;
     public void OnNavigate(InputAction.CallbackContext context)
     {
 
@@ -122,6 +124,22 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
         if(context.phase == InputActionPhase.Performed)
         {
             OptionEvent?.Invoke();
+        }
+    }
+
+    public void OnNextPage(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            NextPageEvent?.Invoke();
+        }
+    }
+
+    public void OnBackPage(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            BackPageEvent?.Invoke();
         }
     }
     #endregion

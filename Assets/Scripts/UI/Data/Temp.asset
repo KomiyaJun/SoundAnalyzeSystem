@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1f1fd76d41cdc498c6a947e3983627, type: 3}
+  m_Name: Temp
+  m_EditorClassIdentifier: 
+  bannerSprites:
+  - {fileID: -4548796474974412338, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
+  - {fileID: 7632911036448307472, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
