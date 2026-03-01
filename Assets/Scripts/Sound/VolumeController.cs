@@ -94,12 +94,12 @@ public class VolumeController : MonoBehaviour
 
     public void SetCurrentParamet()
     {
-        masterSlider.value = PlayerPrefs.GetFloat(KeyMasterVolume, 0.0f);
-        bgmSlider.value = PlayerPrefs.GetFloat(KeyBGMVolume, 0.0f);
+        masterSlider.value = PlayerPrefs.GetFloat(KeyMasterVolume, 1.0f);
+        bgmSlider.value = PlayerPrefs.GetFloat(KeyBGMVolume, 1.0f);
 
-        melodySlider.value = PlayerPrefs.GetFloat(KeyMelody, 0.0f);
-        chordsSlider.value = PlayerPrefs.GetFloat(KeyChords, 0.0f);
-        bassSlider.value = PlayerPrefs.GetFloat(KeyBass, 0.0f);
-        drumSlider.value = PlayerPrefs.GetFloat(KeyDrum, 0.0f);
+        melodySlider.value = PlayerPrefs.GetFloat(KeyMelody, 1.0f);
+        chordsSlider.value = PlayerPrefs.GetFloat(KeyChords, 1.0f);
+        bassSlider.value = PlayerPrefs.GetFloat(KeyBass, 1.0f);
+        drumSlider.value = PlayerPrefs.GetFloat(KeyDrum, 1.0f);
     }
 }
