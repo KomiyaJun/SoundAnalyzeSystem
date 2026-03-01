@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DemoScene.unity
+    path: Assets/MyGames/Scenes/DemoScene.unity
     guid: 354e4f27b60e17f4887aa2999e3f0814
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 351a0298afd1ec142816daf3c1c0af4f, type: 3}
