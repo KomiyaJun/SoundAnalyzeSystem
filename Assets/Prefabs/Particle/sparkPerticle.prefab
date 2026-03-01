@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7270790173242027635}
   - component: {fileID: 3111330593730530350}
   m_Layer: 0
-  m_Name: sparkPerticle
+  m_Name: SparkPerticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
