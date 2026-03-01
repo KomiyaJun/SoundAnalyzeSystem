@@ -33,6 +33,9 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public event Action InteractEvent;
     public event Action InteractEndEvent;
 
+    public event Action<float> ParamateEvent;
+
+    public event Action OptionEvent;
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 value = context.ReadValue<Vector2>();
@@ -79,6 +82,15 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     {
         AttackEvent?.Invoke();
     }
+
+    public void OnParamate(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            float value = context.ReadValue<float>();
+            ParamateEvent?.Invoke(value);
+        }
+    }
     #endregion
 
     #region UIAction
@@ -86,18 +98,49 @@ public class InputReader : ScriptableObject, GameInput.IPlayerActions,GameInput.
     public event Action SubmitEvent;
     public event Action CancelEvent;
 
+    public event Action NextPageEvent;
+    public event Action BackPageEvent;
     public void OnNavigate(InputAction.CallbackContext context)
     {
-        Vector2 value = context.ReadValue<Vector2>();
-        NavigateEvent?.Invoke(value);
+
     }
     public void OnSubmit(InputAction.CallbackContext context)
     {
-        SubmitEvent?.Invoke();
+        if (context.phase == InputActionPhase.Performed)
+        {
+            SubmitEvent?.Invoke();
+        }
     }
     public void OnCancel(InputAction.CallbackContext context)
     {
-        CancelEvent?.Invoke();
+        if (context.phase == InputActionPhase.Performed)
+        {
+            CancelEvent?.Invoke();
+        }
+    }
+
+    public void OnOption(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        {
+            OptionEvent?.Invoke();
+        }
+    }
+
+    public void OnNextPage(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            NextPageEvent?.Invoke();
+        }
+    }
+
+    public void OnBackPage(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            BackPageEvent?.Invoke();
+        }
     }
     #endregion
 

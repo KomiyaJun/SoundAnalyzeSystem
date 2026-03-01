@@ -18,7 +18,6 @@ public class BeatGlow2D : MonoBehaviour
         _targetColor = _baseColor;
     }
 
-    // ★BpmAnalyzerのEventからこれを呼ぶ
     public void OnBeat()
     {
         // 瞬間的に色をフラッシュカラーにする
@@ -27,7 +26,6 @@ public class BeatGlow2D : MonoBehaviour
 
     void Update()
     {
-        // フレームごとに現在の色をベースカラーへ近づける（フェードアウト）
         _spriteRenderer.color = Color.Lerp(_spriteRenderer.color, _baseColor, Time.deltaTime * fadeSpeed);
     }
 }

@@ -7,4 +7,6 @@ public interface IAudioAnalyzer
 
     //¶ƒf[ƒ^‚ğæ“¾
     float[] GetRawSpectrumData();
+
+    void SetPreset(AudioAnalyzerPreset preset);
 }

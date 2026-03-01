@@ -42,7 +42,7 @@ public class InteractiveMovingObject : MonoBehaviour
     {
         transform.position = Vector2.Lerp(pointA.position, pointB.position, currentRatio);
 
-        CurrentParam = Mathf.Lerp(paramA, paramB, currentRatio);
+        CurrentParam = currentRatio.Remap(0, 1f, paramA, paramB);
 
         if(!Mathf.Approximately(CurrentParam, _lastParam))
         {

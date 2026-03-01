@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1f1fd76d41cdc498c6a947e3983627, type: 3}
+  m_Name: FFT
+  m_EditorClassIdentifier: 
+  bannerSprites:
+  - {fileID: 3470755771023746343, guid: a0e73282cd4b9244f964d4ded120b4a2, type: 3}
+  - {fileID: 5652656239799086976, guid: aae2d49fc5b785545a39dcaea6b325f6, type: 3}

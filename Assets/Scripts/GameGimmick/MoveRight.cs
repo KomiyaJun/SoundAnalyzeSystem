@@ -12,6 +12,14 @@ public class MoveRight : MonoBehaviour
     [Header("プレイヤータグ")]
     [SerializeField] private string playerTag = "Player";
 
+    // アプリ終了時に親子解除処理が走るのを防ぐためのフラグ
+    private bool isQuitting = false;
+
+    private void OnApplicationQuit()
+    {
+        isQuitting = true;
+    }
+
     public void StartMoving()
     {
         StartCoroutine(LerpMove());
@@ -48,6 +56,9 @@ public class MoveRight : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
+        // アプリ終了中、またはこのオブジェクト自体が非アクティブになる時は処理しない
+        if (isQuitting || !gameObject.activeInHierarchy) return;
+
         if (collision.gameObject.CompareTag(playerTag))
         {
             collision.transform.SetParent(null);

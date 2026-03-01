@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Water
+  - Effecter1
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - Water
   - UI
   - Interacter
-  - 
+  - PostProcess
   - 
   - 
   - 
@@ -39,8 +40,23 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back
+    uniqueID: 384808989
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: MinusOne
+    uniqueID: 1144854037
+    locked: 0
+  - name: Player
+    uniqueID: 2695704813
+    locked: 0
+  - name: PlusOne
+    uniqueID: 3531030357
+    locked: 0
+  - name: Front
+    uniqueID: 571373665
     locked: 0
   m_RenderingLayers:
   - Default

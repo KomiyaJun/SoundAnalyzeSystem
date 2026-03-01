@@ -62,4 +62,9 @@ public class AudioMixerAnalyzer : MonoBehaviour, IAudioAnalyzer
     {
         return _spectrumData;
     }
+
+    public void SetPreset(AudioAnalyzerPreset preset)
+    {
+
+    }
 }

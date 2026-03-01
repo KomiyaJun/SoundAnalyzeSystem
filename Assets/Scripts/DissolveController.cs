@@ -1,41 +1,37 @@
+using System.Collections;
 using UnityEngine;
 
 public class DissolveController : MonoBehaviour
 {
     private Material targetMaterial;
-    private bool isAnimating = false;
-    private float currentProgress = 0f; // 0 = 出現完了, 1 = 消失完了
+
+    private float currentAmount = 0f;
 
     [Header("Settings")]
-    public float speed = 1.0f;
+    public float duration = 0.3f; // 変化にかかる時間（秒）
 
     void Awake()
     {
         targetMaterial = GetComponent<Renderer>().material;
-        SetProgress(0f);
+
+        currentAmount = 0f;
+        ApplyToShader(currentAmount);
     }
-
-    void Update()
-    {
-        if (!isAnimating) return;
-
-    }
-
-
-    [ContextMenu("Start Dissolve")]
 
     [ContextMenu("Appear (現れる)")]
     public void Appear()
     {
         StopAllCoroutines();
-        StartCoroutine(AnimateDissolve(false));
+        // 現在の値(currentAmount)から 0(表示) に向かってアニメーション
+        StartCoroutine(AnimateDissolve(0f));
     }
 
     [ContextMenu("Dissolve (消える)")]
     public void Dissolve()
     {
         StopAllCoroutines();
-        StartCoroutine(AnimateDissolve(true));
+        // 現在の値(currentAmount)から 1(消失) に向かってアニメーション
+        StartCoroutine(AnimateDissolve(1f));
     }
 
     [ContextMenu("Stop (止める)")]
@@ -46,33 +42,30 @@ public class DissolveController : MonoBehaviour
 
     // --- 内部処理 ---
 
-    private System.Collections.IEnumerator AnimateDissolve(bool dissolving)
+    private IEnumerator AnimateDissolve(float targetValue)
     {
-        float startValue = dissolving ? 0f : 1f;
-        float endValue = dissolving ? 1f : 0f;
-        float elapsed = 0f;
+        float startValue = currentAmount;
+        float time = 0f;
 
-        // 現在の地点から再開（スムーズに反転させるため）
-        float duration = 1.0f / speed;
+        // すでに目標値なら何もしない
+        if (Mathf.Abs(startValue - targetValue) < 0.01f) yield break;
 
-        while (elapsed < duration)
+        while (time < duration)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-            float progress = Mathf.Lerp(startValue, endValue, t);
+            //Time使用
+            time += Time.deltaTime;
+            currentAmount = Mathf.Lerp(startValue, targetValue, time / duration);
 
-
-            ApplyToShader(progress);
+            ApplyToShader(currentAmount);
             yield return null;
         }
+
+        currentAmount = targetValue;
+        ApplyToShader(currentAmount);
     }
 
-    private void ApplyToShader(float progress)
+    private void ApplyToShader(float val)
     {
-        float fakeTime = progress * 80f;
-        targetMaterial.SetFloat("_StartTime", Time.time - fakeTime);
-        targetMaterial.SetFloat("_Speed", 1.0f); // 速度はスクリプト側で計算済み
+        targetMaterial.SetFloat("_DissolveAmount", val);
     }
-
-    private void SetProgress(float p) => ApplyToShader(p);
 }
