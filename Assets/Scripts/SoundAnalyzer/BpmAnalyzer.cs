@@ -28,6 +28,8 @@ public class BpmAnalyzer : MonoBehaviour
 
     public float EstimatedBpm { get; private set; }
 
+    private float kickVol;
+
     private void Update()
     {
         var analyzer = AudioAnalyzeService.Instance;
@@ -40,7 +42,7 @@ public class BpmAnalyzer : MonoBehaviour
         int dynamicMin = Mathf.RoundToInt(fftParamMin * pitch);
         int dynamicMax = Mathf.RoundToInt(fftParamMax * pitch);
 
-        float kickVol = analyzer.GetBandAverage(dynamicMin, dynamicMax);
+        kickVol = analyzer.GetBandAverage(dynamicMin, dynamicMax);
         float highVol = analyzer.GetBandAverage(highFreqMin, highFreqMax);
 
         float dynamicCoolDown = baseCoolDownTime / pitch;

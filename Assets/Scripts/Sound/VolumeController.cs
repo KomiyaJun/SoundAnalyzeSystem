@@ -39,14 +39,7 @@ public class VolumeController : MonoBehaviour
         runtimeUserPreset = ScriptableObject.CreateInstance<BgmPreset>();
 
         //起動時に保存されている値をスライダーに反映する
-        masterSlider.value = PlayerPrefs.GetFloat(KeyMasterVolume, 0.0f);
-        bgmSlider.value = PlayerPrefs.GetFloat(KeyBGMVolume, 0.0f);
-
-        melodySlider.value = PlayerPrefs.GetFloat(KeyMelody, 0.0f);
-        chordsSlider.value = PlayerPrefs.GetFloat(KeyChords, 0.0f);
-        bassSlider.value = PlayerPrefs.GetFloat(KeyBass, 0.0f);
-        drumSlider.value = PlayerPrefs.GetFloat(KeyDrum, 0.0f);
-
+        SetCurrentParamet();
 
         
         //スライダー動作時のイベント登録
@@ -97,5 +90,16 @@ public class VolumeController : MonoBehaviour
     private void OnDestroy()
     {
         PlayerPrefs.Save();
+    }
+
+    public void SetCurrentParamet()
+    {
+        masterSlider.value = PlayerPrefs.GetFloat(KeyMasterVolume, 0.0f);
+        bgmSlider.value = PlayerPrefs.GetFloat(KeyBGMVolume, 0.0f);
+
+        melodySlider.value = PlayerPrefs.GetFloat(KeyMelody, 0.0f);
+        chordsSlider.value = PlayerPrefs.GetFloat(KeyChords, 0.0f);
+        bassSlider.value = PlayerPrefs.GetFloat(KeyBass, 0.0f);
+        drumSlider.value = PlayerPrefs.GetFloat(KeyDrum, 0.0f);
     }
 }

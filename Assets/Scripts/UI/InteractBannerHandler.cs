@@ -20,8 +20,11 @@ public class InteractBannerHandler : MonoBehaviour, IInteractable
     {
         if (_targetSprite == null) _targetSprite = GetComponent<SpriteRenderer>();
 
+        if (_targetSprite != null)
+        {
+            _originalColor = _targetSprite.color;
+        }
     }
-
     private void OnEnable()
     {
         _inputReader.InteractEvent += OnInteractInput;

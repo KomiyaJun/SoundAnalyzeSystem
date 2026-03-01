@@ -168,7 +168,7 @@ MonoBehaviour:
   iconPrefab: {fileID: 5391954774339497104, guid: 8b4f016a3ac1c924f8096c95d2fd3507, type: 3}
   startOffset: {x: -1.5, y: 2, z: 0}
   spacing: {x: 1, y: 0, z: 0}
-  activeSprite: {fileID: -4548796474974412338, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
-  inactiveSprite: {fileID: 7632911036448307472, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
+  activeSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  inactiveSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   normalColor: {r: 0, g: 0.13793898, b: 1, a: 1}
   maxColor: {r: 1, g: 0, b: 0, a: 1}

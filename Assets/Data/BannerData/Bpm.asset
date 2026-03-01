@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa1f1fd76d41cdc498c6a947e3983627, type: 3}
-  m_Name: Temp
+  m_Name: Bpm
   m_EditorClassIdentifier: 
   bannerSprites:
-  - {fileID: -4548796474974412338, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
-  - {fileID: 7632911036448307472, guid: d092dd8f3878805448901a5dfd3389d5, type: 3}
+  - {fileID: -7896752793943019379, guid: 12cb0004a4a7dbe4db557a69be7d0930, type: 3}
+  - {fileID: -2813515393753715588, guid: 0adab1964196393408206318d878984a, type: 3}

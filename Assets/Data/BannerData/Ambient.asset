@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1f1fd76d41cdc498c6a947e3983627, type: 3}
+  m_Name: Ambient
+  m_EditorClassIdentifier: 
+  bannerSprites:
+  - {fileID: -3718454515368336058, guid: 0d6c6b075efc06d4d96625359930d411, type: 3}
+  - {fileID: -2855799924838964432, guid: 2d716a9cafa555a45a2949bf1f123bb7, type: 3}

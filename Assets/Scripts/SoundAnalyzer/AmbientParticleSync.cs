@@ -18,8 +18,8 @@ public class AmbientParticleSync : MonoBehaviour
     [SerializeField] private float smoothSpeed = 5f;
 
     private float _smoothedLow;
+    private float _currentHighVol;
     private IAudioAnalyzer _analyzer;
-    
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -52,11 +52,34 @@ public class AmbientParticleSync : MonoBehaviour
         if (data == null || data.Length == 0) return;
 
         float highVol = _analyzer.GetBandAverage(highFreqMin, data.Length - 1);
-
-        if(highVol > sparkThreshold && sparkParticles!= null)
+        _currentHighVol = highVol;
+        if (highVol > sparkThreshold && sparkParticles!= null)
         {
             int emitCount = Mathf.CeilToInt(highVol * sparkBurstCount * 1000f);
             sparkParticles.Emit(Mathf.FloorToInt(emitCount));
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+
+        Gizmos.color = new Color(0, 1, 1, 0.5f); // 半透明の水色
+        float sphereSize = Mathf.Lerp(minStartSize, maxStartSize, _smoothedLow * 10f);
+        Gizmos.DrawWireSphere(transform.position, sphereSize);
+
+
+        Vector3 barBasePos = transform.position + Vector3.right * 2.0f;
+        float visualScale = 2000f; // 値が小さいので大きく拡大して表示
+
+        Gizmos.color = Color.red;
+        float thresholdHeight = sparkThreshold * visualScale;
+        Gizmos.DrawLine(barBasePos - Vector3.right * 0.5f + Vector3.up * thresholdHeight,
+                        barBasePos + Vector3.right * 0.5f + Vector3.up * thresholdHeight);
+
+        // 現在の音量バー
+        Gizmos.color = _currentHighVol > sparkThreshold ? Color.yellow : Color.gray;
+        float currentHeight = _currentHighVol * visualScale;
+
+        Gizmos.DrawCube(barBasePos + Vector3.up * (currentHeight / 2), new Vector3(0.5f, currentHeight, 0.5f));
     }
 }

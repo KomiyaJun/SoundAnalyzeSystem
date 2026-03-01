@@ -3,6 +3,14 @@ using UnityEngine.Audio;
 using System.Collections.Generic;
 using System;
 
+/*
+ * Class名:UnitySoundManager
+ * 役割:ゲーム内で利用するAudioSourceの管理,AudioMixerへの接続,サウンドの再生&切り替え
+ * 
+ * -曲のパート別にAudioSourceを用意し、垂直同期を利用した再生によりゲーム内でパート毎に音量調整を可能にしています。
+ * -クロスフェード処理により曲の切り替え時に違和感がないようになっています。
+ */ 
+
 namespace MyGame.AudioSetting
 {
     public class UnitySoundManager : MonoBehaviour, ISoundManager
