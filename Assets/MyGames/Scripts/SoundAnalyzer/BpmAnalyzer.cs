@@ -6,19 +6,12 @@ using TMPro;
 
 public class BpmAnalyzer : MonoBehaviour
 {
+    [Header("参照")]
+    [SerializeField] private BpmAnalyzerSettings _settings;
+
     [Header("イベント通知先")]
-    [SerializeField] private GameEvent BeadEvent;
+    [SerializeField] private GameEvent BeatEvent;
 
-    [Header("設定")]
-    [SerializeField] private float threshold = 0.5f;
-    [SerializeField] private float baseCoolDownTime = 0.25f;
-    [SerializeField] private int fftParamMin = 0;
-    [SerializeField] private int fftParamMax = 2;
-
-    [Header("スネアの回避設定")]
-    [SerializeField] private int highFreqMin = 10;
-    [SerializeField] private int highFreqMax = 20;
-    [SerializeField] private float kickBias = 1.5f;
 
     private float _lastHitTime;
     private bool _isBeatSustained;
@@ -27,6 +20,7 @@ public class BpmAnalyzer : MonoBehaviour
     private const int MaxIntervals = 8;
 
     public float EstimatedBpm { get; private set; }
+    public float KickVol { get; private set; }
 
     private float kickVol;
 
@@ -37,53 +31,81 @@ public class BpmAnalyzer : MonoBehaviour
 
         if(analyzer == null || soundManager == null) return;
 
-        float pitch = soundManager.CurrentBgmPitch;
 
-        int dynamicMin = Mathf.RoundToInt(fftParamMin * pitch);
-        int dynamicMax = Mathf.RoundToInt(fftParamMax * pitch);
+        bool isBeat = CheckBeat(analyzer.SpectrumData, Time.time, soundManager.CurrentBgmPitch);
 
-        kickVol = analyzer.GetBandAverage(dynamicMin, dynamicMax);
-        float highVol = analyzer.GetBandAverage(highFreqMin, highFreqMax);
-
-        float dynamicCoolDown = baseCoolDownTime / pitch;
-
-        if (kickVol > threshold && kickVol > highVol * kickBias)
+        if (isBeat)
         {
-            if(!_isBeatSustained && Time.time > _lastHitTime + dynamicCoolDown)
-            {
-                OnBeatDetected();
-                _isBeatSustained = true;
-            }
-        }
-        else
-        {
-            if (kickVol < threshold * 0.8f)
-            {
-                _isBeatSustained = false;
-            }
+            ProcessBeat(Time.time);
         }
     }
 
-    private void OnBeatDetected()
+    public bool CheckBeat(float[] spectrum, float currentTime, float pitch)
     {
-        float currentTime = Time.time;
-        float interval = currentTime - _lastHitTime;
+        if (_settings == null || spectrum == null || spectrum.Length == 0) return false;
 
-        if(_lastHitTime > 0 && interval < 2.0f)
+        int dynamicMin = Mathf.RoundToInt(_settings.fftParamMin * pitch);
+        int dynamicMax = Mathf.RoundToInt(_settings.fftParamMax * pitch);
+        KickVol = GetBandAverage(spectrum, dynamicMin, dynamicMax);
+
+        float highVol = GetBandAverage(spectrum, _settings.highFreqMin, _settings.highFreqMax);
+        float dynamicCoolDown = _settings.baseCoolDownTime / pitch;
+
+        bool detected = false;
+        if (KickVol > _settings.threshold && KickVol > highVol * _settings.kickBias)
+        {
+            if (!_isBeatSustained && currentTime > _lastHitTime + dynamicCoolDown)
+            {
+                detected = true;
+                _isBeatSustained = true;
+            }
+        }
+        else if (KickVol < _settings.threshold * 0.8f)
+        {
+            _isBeatSustained = false;
+        }
+        return detected;
+    }
+
+    private float GetBandAverage(float[] spectrum, int min, int max)
+    {
+        if (min < 0 || max >= spectrum.Length || min > max) return 0;
+
+        float sum = 0;
+        for(int i = min; i <= max; i++)
+        {
+            sum += spectrum[i];
+        }
+        return sum / (max - min + 1);
+
+    }
+
+    public void ProcessBeat(float currentTime, bool raiseEvent = true)
+    {
+        float interval = currentTime - _lastHitTime;
+        if (_lastHitTime > 0 && interval < 2.0f)
         {
             _intervals.Add(interval);
             if (_intervals.Count > MaxIntervals) _intervals.RemoveAt(0);
 
-            //平均感覚からBPMを出す
             float avgInterval = 0;
             _intervals.ForEach(i => avgInterval += i);
             avgInterval /= _intervals.Count;
 
-            EstimatedBpm = 60f / avgInterval;
+            EstimatedBpm = 60 / avgInterval;
 
-            BeadEvent?.Raise();
+            if (raiseEvent)
+            {
+                BeatEvent?.Raise();
+            }
         }
-
         _lastHitTime = currentTime;
+    }
+
+    public void ResetState()
+    {
+        _lastHitTime = 0;
+        _isBeatSustained = false;
+        _intervals.Clear();
     }
 }
