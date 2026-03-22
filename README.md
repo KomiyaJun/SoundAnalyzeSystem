@@ -36,3 +36,18 @@ BPM・テンポ検知による通知システム:
 や 
 **Visualizer.cs**
 などを通じ、取得した低周波・高周波のデータに基づいてパーティクルの生成量、オブジェクトのトランスフォーム（拡大縮小）、発光（BeatLightEffect.cs）を連動させています。
+
+# 使用技術
+**[基本環境]**
+**・ゲームエンジン**
+Unity 6000.0.59f2
+**・プログラミング言語**
+C#
+**・コア技術**
+オーディオ解析:
+AudioSource.SpectrumData(FFT解析に利用)
+サウンド制御:
+Unity AudioMixer/AudioSource(レイヤー別のBGM管理、音の制御)
+**・開発ツール**
+IDE(総合開発環境): VisualStudio 2022
+バージョン管理: Git/GitHub
